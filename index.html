@@ -1,0 +1,1119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="B(aerial): a digital burial ground above Manhattan.">
+<meta name="theme-color" content="#29211e">
+</head>
+<body>
+<title>B(aerial) Digital Graveyard</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=Old+Standard+TT:ital@1&display=swap">
+<style>
+/* Layout: one quiet screen at a time. A hairline bar; the cover is mostly empty night with the
+   B(aerial) mark, three small devices on a bed of cloud, one slow shared light. Pages: Mission,
+   Lay to Rest (three steps), The Plots (Manhattan with 125 devices in slow orbit).
+   Type: Jost, thin geometric capitals standing in for the board's Novecento Sans Light; Bron for the mark. */
+:root {
+  --void: #1d1715;
+  --ground: #29211e;          /* the board's ground, flat */
+  --chalk: #efebe5;
+  --soft: #a0978f;
+  --faint: #645c56;
+  --glass: rgba(239, 235, 229, .03);
+  --glass-hi: rgba(239, 235, 229, .075);
+  --line: rgba(239, 235, 229, .12);
+  --line-hi: rgba(239, 235, 229, .3);
+  --alert: #e9a08a;
+  --f: "Jost", "Futura", "Century Gothic", "Avenir Next", sans-serif;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box }
+[hidden] { display: none !important }
+html { background: var(--ground); overflow-x: clip; --light: #7fb8e6 }
+body {
+  margin: 0; min-height: 100vh; color: var(--chalk);
+  font: 300 12.5px/1.8 var(--f); letter-spacing: .12em; text-transform: uppercase;
+  background: var(--ground);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overflow-x: hidden;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 20; background: var(--ground) }
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 30; opacity: .23; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+}
+.wrap { max-width: 1120px; margin-inline: auto }
+a { color: inherit }
+:focus-visible { outline: 1px solid var(--chalk); outline-offset: 4px; border-radius: 4px }
+h1, h2, h3, p { margin: 0; font-weight: 200 }
+h1, h2, h3 { text-wrap: balance }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
+.caps { text-transform: uppercase; letter-spacing: .28em; font-size: 10px; font-weight: 300 }
+.num { font-variant-numeric: tabular-nums }
+.bron { display: block; line-height: 0 }
+.bron svg { display: block; height: 1em; width: auto; max-width: 100% }
+
+/* --- bar --- */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px))); background: var(--ground); border-bottom: 1px solid var(--line) }
+.bar .in { max-width: 1120px; margin-inline: auto; display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px 24px; align-items: center; padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px)) }
+.home { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; justify-self: start }
+.home svg { width: 20px; height: 21px }
+.home span { color: var(--soft) }
+.bar nav { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center }
+.bar nav a { text-decoration: none; color: var(--soft); padding: 5px 12px; border-radius: 2px; white-space: nowrap }
+.bar nav a:hover { color: var(--chalk) }
+.bar nav a[aria-current="page"] { color: var(--chalk); background: var(--glass-hi) }
+.readout { justify-self: end; display: flex; gap: 18px; color: var(--faint); white-space: nowrap }
+.readout b { color: var(--soft); font-weight: 300 }
+
+/* --- pages --- */
+.page { padding-block: 64px 80px; min-height: calc(100vh - 50px) }
+@media (prefers-reduced-motion: no-preference) {
+  .page { animation: arrive 1.1s cubic-bezier(.2, .7, .2, 1) both }
+  @keyframes arrive { from { opacity: 0; filter: blur(8px) } }
+}
+.kicker { color: var(--faint) }
+.title { font-size: clamp(17px, 2vw, 24px); letter-spacing: .26em; line-height: 1.08; font-weight: 200; letter-spacing: .04em; text-transform: uppercase; margin-top: 14px }
+.title:focus { outline: none }
+.lead { color: var(--soft); max-width: 46em; margin-top: 14px }
+.glass { position: relative; background: var(--glass); border: 1px solid var(--line); border-radius: 2px }
+.glass::after { content: ""; position: absolute; inset: -1px; pointer-events: none; --k: rgba(239,235,229,.7);
+  background:
+    linear-gradient(var(--k), var(--k)) 0 0 / 10px 1px no-repeat, linear-gradient(var(--k), var(--k)) 0 0 / 1px 10px no-repeat,
+    linear-gradient(var(--k), var(--k)) 100% 0 / 10px 1px no-repeat, linear-gradient(var(--k), var(--k)) 100% 0 / 1px 10px no-repeat,
+    linear-gradient(var(--k), var(--k)) 0 100% / 10px 1px no-repeat, linear-gradient(var(--k), var(--k)) 0 100% / 1px 10px no-repeat,
+    linear-gradient(var(--k), var(--k)) 100% 100% / 10px 1px no-repeat, linear-gradient(var(--k), var(--k)) 100% 100% / 1px 10px no-repeat }
+.sheethead { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; color: var(--faint); border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 44px }
+.sheethead b { color: var(--soft); font-weight: 300 }
+.annot { position: absolute; inset: 22px 0 auto; display: flex; justify-content: space-between; color: var(--faint); pointer-events: none }
+.spec { width: 100%; margin-top: 70px; text-align: left; border-top: 1px solid var(--line-hi) }
+.spec h4 { margin: 14px 0 18px; font-weight: 300; font-size: 10px; letter-spacing: .3em; color: var(--soft) }
+.spec dl { margin: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px 16px }
+.spec dl div { display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 10px }
+.spec dt { color: var(--faint); font-size: 9.5px; letter-spacing: .26em }
+.spec dd { margin: 0; font-size: 18px; letter-spacing: .08em; font-variant-numeric: tabular-nums }
+.spec dd small { font-size: 9px; color: var(--soft); margin-left: 4px; letter-spacing: .2em }
+.spec dd.alt { font-size: 14px; color: var(--faint) }
+.pill { font: 300 10px/1 var(--f); text-transform: uppercase; letter-spacing: .3em; padding: 12px 20px; border-radius: 2px; border: 1px solid var(--chalk); background: var(--chalk); color: var(--void); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 10px }
+.pill:hover { background: #fff; box-shadow: 0 0 34px color-mix(in srgb, var(--light) 35%, transparent) }
+.pill.ghost { background: transparent; color: var(--chalk); border-color: var(--line-hi) }
+.pill.ghost:hover { background: var(--glass-hi); box-shadow: none }
+.pill:disabled { opacity: .35; cursor: not-allowed; box-shadow: none }
+
+/* --- cover --- */
+.cover { text-align: center; display: flex; flex-direction: column; align-items: center; padding-top: clamp(56px, 14vh, 150px); padding-bottom: 0; position: relative; isolation: isolate }
+.cover .mark { font-size: clamp(54px, 10.5vw, 132px); position: relative; filter: drop-shadow(0 0 40px rgba(239,235,229,.06)) }
+.cover .mark svg { margin-inline: auto }
+.cover .site { margin-top: clamp(12px, 1.6vw, 20px); font-size: clamp(22px, 3.4vw, 42px) }
+.cover .site svg { margin-inline: auto }
+.yard { position: relative; z-index: 2; width: min(500px, 70vw); aspect-ratio: 2000 / 532; margin-top: clamp(90px, 17vh, 190px) }
+.yard img, .yard .tint, .yard .halo { position: absolute; inset: 0; width: 100%; height: 100% }
+.yard img { display: block; pointer-events: none; user-select: none }
+.yard .tint { background: var(--light); -webkit-mask: url(glow-mask.png) center / 100% 100% no-repeat; mask: url(glow-mask.png) center / 100% 100% no-repeat; mix-blend-mode: multiply; pointer-events: none }
+.yard .halo { background: var(--light); -webkit-mask: url(halo-mask.png) center / 100% 100% no-repeat; mask: url(halo-mask.png) center / 100% 100% no-repeat; mix-blend-mode: screen; opacity: .5; pointer-events: none; transform: scale(1.04) }
+@media (prefers-reduced-motion: no-preference) { .yard .halo { animation: breathe 9s ease-in-out infinite } @keyframes breathe { 50% { opacity: .9 } } }
+.hot { position: absolute; top: 18%; height: 76%; width: 16%; left: calc(var(--x) - 8%); border-radius: 40% 40% 14% 14%; text-decoration: none; z-index: 3 }
+.hot .lbl { position: absolute; left: 50%; bottom: calc(100% + 18px); transform: translateX(-50%); white-space: nowrap; color: var(--soft); transition: color .6s, letter-spacing .8s }
+.hot:hover .lbl, .hot:focus-visible .lbl { color: var(--chalk); letter-spacing: .34em }
+.hot::after { content: ""; position: absolute; left: 50%; top: 40%; width: 120%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--light) 30%, transparent), transparent); opacity: 0; transition: opacity .8s; pointer-events: none }
+.hot:hover::after, .hot:focus-visible::after { opacity: 1 }
+.clouds { position: relative; z-index: 1; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); height: clamp(110px, 16vw, 210px); margin-top: calc(-1 * clamp(70px, 9vw, 120px)); pointer-events: none }
+.clouds i { position: absolute; inset: 0; background-repeat: repeat-x; background-position: 0 100%; background-size: auto 100% }
+.clouds .c2 { background-image: url(clouds-2.webp); opacity: .3; bottom: 22%; -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent) }
+.clouds .c1 { background-image: url(clouds-1.webp); opacity: .62 }
+@media (prefers-reduced-motion: no-preference) { .clouds .c1 { animation: drift 240s linear infinite } .clouds .c2 { animation: drift 380s linear infinite reverse } @keyframes drift { to { background-position: -2400px 100% } } }
+.clouds::after { content: ""; position: absolute; inset: auto 0 0; height: 55%; background: linear-gradient(transparent, var(--ground)) }
+.cover .foot { margin-top: auto; padding: 40px 0 26px; color: var(--faint); display: flex; gap: 8px 28px; flex-wrap: wrap; justify-content: center }
+.phone-menu { display: none; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 30px; position: relative; z-index: 3 }
+
+/* --- mission --- */
+.mission { display: grid; place-items: center; text-align: center }
+.mission blockquote { margin: 0; font-size: clamp(14px, 1.6vw, 19px); line-height: 1.9; font-weight: 300; max-width: 36em; letter-spacing: .2em }
+.mission blockquote::before, .mission blockquote::after { color: var(--faint) }
+.mission .sig { margin-top: 30px; color: var(--faint) }
+.process { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 90px; width: 100%; text-align: left }
+.process figure { margin: 0; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0 }
+.process .art { aspect-ratio: 1; display: grid; place-items: center; background: rgba(0,0,0,.3) }
+.process .art.paper { background: #e9e6e1 }
+.process img { width: 88%; height: 88%; max-width: 88%; object-fit: contain }
+.process figcaption { padding: 14px 16px 18px; display: grid; gap: 4px; border-top: 1px solid var(--line) }
+.process figcaption span { color: var(--soft); font-size: 10.5px; line-height: 1.7 }
+
+/* --- lay to rest --- */
+.stepper { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 26px }
+.stepper a { text-decoration: none; display: inline-flex; align-items: center; gap: 10px; padding: 7px 16px 7px 12px; border-radius: 2px; border: 1px solid var(--line); color: var(--faint) }
+.stepper a i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--line-hi) }
+.stepper a[aria-current="step"] { color: var(--chalk); border-color: var(--line-hi); background: var(--glass-hi) }
+.stepper a[aria-current="step"] i, .stepper a.done i { background: var(--light); border-color: var(--light); box-shadow: 0 0 10px var(--light) }
+.stepper a.done { color: var(--soft) }
+.stepper a[aria-disabled="true"] { pointer-events: none; opacity: .5 }
+.sheet { margin-top: 26px; padding: clamp(20px, 3.4vw, 36px); display: grid; gap: 24px }
+.row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr); gap: 16px }
+.field { display: grid; gap: 10px; min-width: 0 }
+.field label { color: var(--soft) }
+.field input { text-transform: uppercase; letter-spacing: .14em; font: 300 14px/1.4 var(--f); color: var(--chalk); background: transparent; border: 0; border-bottom: 1px solid var(--line-hi); border-radius: 0; padding: 8px 2px; width: 100% }
+.field input::placeholder { color: var(--faint) }
+.field input:focus { outline: none; border-bottom-color: var(--chalk) }
+.drop { position: relative; border: 1px dashed var(--line-hi); border-radius: 2px; padding: 54px 16px; text-align: center; cursor: pointer; display: grid; gap: 10px; justify-items: center; background: rgba(0,0,0,.2); transition: background .4s, border-color .4s }
+.drop.over { border-color: var(--chalk); background: var(--glass-hi) }
+.drop strong { font-weight: 300; font-size: 15px; letter-spacing: .08em; text-transform: uppercase }
+.drop span { color: var(--soft); font-size: 11px }
+.drop input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none }
+.filelist { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0 }
+.filelist li { font-size: 10px; border: 1px solid var(--line); border-radius: 2px; padding: 3px 12px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--soft) }
+.private { color: var(--faint); font-size: 10.5px }
+.err { color: var(--alert); font-size: 11px; min-height: 1.4em }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 20px }
+.actions .right { display: flex; flex-wrap: wrap; gap: 10px; margin-left: auto }
+
+.bench { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 26px; align-items: start }
+#stage { width: 100%; height: auto; aspect-ratio: 3 / 2; display: block; background: #000; image-rendering: pixelated; border-radius: 2px; border: 1px solid var(--line) }
+.statusline { color: var(--faint); margin-top: 12px }
+.status { color: var(--soft); min-height: 3.3em; margin-top: 6px }
+.thumbs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px }
+.thumbs canvas { width: 48px; height: 32px; image-rendering: pixelated; border-radius: 4px; border: 1px solid var(--line) }
+.projector { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: center; padding: 20px }
+.orbit { width: 96px; aspect-ratio: 1; border-radius: 50%; position: relative; background: radial-gradient(circle, var(--pc, #333) 0%, color-mix(in srgb, var(--pc, #333) 55%, transparent) 40%, transparent 70%); box-shadow: inset 0 0 0 1px var(--line-hi) }
+.orbit::after { content: ""; position: absolute; inset: -16px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--pc, #333) 38%, transparent), transparent 66%); filter: blur(6px) }
+@media (prefers-reduced-motion: no-preference) { .orbit::after { animation: glowp 5s ease-in-out infinite } @keyframes glowp { 50% { opacity: .4 } } }
+.projector .nm { font-size: 16px; line-height: 1.1; font-weight: 200; letter-spacing: .06em; text-transform: uppercase; overflow-wrap: anywhere }
+.projector .meta { color: var(--soft); display: grid; gap: 2px; margin-top: 8px; font-size: 10.5px }
+.ptable { padding: 18px }
+.ptable .cap { display: flex; justify-content: space-between; gap: 10px; color: var(--faint); margin-bottom: 14px }
+.cells { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 6px }
+.cell { border-radius: 1px; aspect-ratio: 1; position: relative; background: var(--c); opacity: .18; transition: opacity .6s, transform .6s, box-shadow .6s; overflow: hidden }
+.cell .no { position: absolute; left: 5px; top: 4px; font: 400 10px/1 var(--f); color: #fff; text-shadow: 0 0 3px rgba(0,0,0,.9) }
+.cell .pc { position: absolute; right: 5px; bottom: 4px; font: 400 10px/1 var(--f); color: #fff; text-shadow: 0 0 4px rgba(0,0,0,.9) }
+.cell.on { opacity: .7 }
+.cell.pick { opacity: 1; box-shadow: 0 0 0 1.5px var(--chalk), 0 0 26px var(--c); transform: scale(1.07); z-index: 1 }
+.legendline { color: var(--faint); font-size: 10.5px; margin-top: 12px }
+.placement { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 2px; overflow: hidden }
+.placement div { background: rgba(12,10,9,.6); padding: 12px 16px; display: grid; gap: 2px }
+.placement dt { color: var(--faint) }
+.placement dd { margin: 0; font-size: 13px; font-weight: 200; letter-spacing: .04em; font-variant-numeric: tabular-nums }
+
+/* --- plots --- */
+.plots-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px 40px }
+.ledger { display: flex; flex-wrap: wrap; gap: 14px 36px }
+.ledger div { display: grid }
+.ledger strong { font-size: 20px; line-height: 1.05; font-weight: 200; font-variant-numeric: tabular-nums; letter-spacing: .02em }
+.ledger span { color: var(--faint) }
+.map { position: relative; overflow: hidden; margin-top: 30px }
+.map svg { display: block; width: 100%; height: auto }
+.map .m { cursor: pointer }
+.map .m:focus { outline: none }
+.map .m:focus-visible .ring, .map .m:hover .ring { stroke: var(--chalk); stroke-width: 1 }
+.tip { position: absolute; pointer-events: none; background: #1d1715; color: var(--chalk); border: 1px solid var(--line-hi); border-radius: 2px; padding: 8px 12px; font-size: 10.5px; max-width: 250px; transform: translate(-50%, calc(-100% - 16px)); z-index: 2 }
+.tip b { display: block; font-weight: 300; text-transform: uppercase; letter-spacing: .2em; font-size: 11px; color: var(--soft) }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 14px; color: var(--faint) }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; vertical-align: 1px }
+.yours { margin-top: 18px; padding: 16px 20px; display: flex; flex-wrap: wrap; gap: 8px 26px; align-items: center }
+.yours .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--pc); box-shadow: 0 0 14px var(--pc) }
+.yours b { font-weight: 300; font-size: 13px; letter-spacing: .05em; text-transform: uppercase }
+.yours span { color: var(--soft) }
+.named { margin-top: 70px }
+.named h3 { font-size: 12px; letter-spacing: .3em; text-transform: uppercase; font-weight: 300 }
+.plotgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-top: 18px }
+.plot { all: unset; box-sizing: border-box; cursor: pointer; display: grid; border-radius: 2px; overflow: hidden; background: var(--glass); border: 1px solid var(--line); transition: border-color .4s }
+.plot:hover { border-color: var(--line-hi) }
+.plot:focus-visible { outline: 1px solid var(--chalk); outline-offset: 3px }
+.plot canvas { width: 100%; height: auto; aspect-ratio: 3 / 2; display: block; image-rendering: pixelated }
+.plot .body { padding: 12px 14px 14px; display: grid; gap: 3px }
+.plot .who { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; font-weight: 300; overflow-wrap: anywhere }
+.plot .meta { color: var(--faint); font-size: 9.5px; font-variant-numeric: tabular-nums }
+.plot .col { display: flex; gap: 8px; align-items: center; color: var(--soft); font-size: 10px }
+.plot .col i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c) }
+.plot.returned { opacity: .5 }
+
+dialog#grave { background: rgba(18,15,14,.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: var(--chalk); border: 1px solid var(--line-hi); border-radius: 2px; padding: 0; width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 32px) }
+dialog#grave::backdrop { background: rgba(4, 3, 3, .72); backdrop-filter: blur(4px) }
+.g-inner { display: grid; gap: 16px; padding: 24px }
+.g-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start }
+.g-top h3 { font-size: clamp(16px, 2.6vw, 20px); line-height: 1.08; letter-spacing: .05em; text-transform: uppercase; overflow-wrap: anywhere }
+#g-residue { width: 100%; height: auto; aspect-ratio: 3 / 2; image-rendering: pixelated; border-radius: 2px; display: block }
+.g-meta { display: grid; gap: 4px; color: var(--soft); font-size: 11px }
+.g-actions, .confirm { display: flex; flex-wrap: wrap; gap: 10px; align-items: center }
+.confirm { color: var(--alert) }
+.x { all: unset; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 200 22px/1 var(--f); color: var(--soft); background: var(--glass-hi) }
+.x:hover { color: var(--chalk) }
+.x:focus-visible { outline: 1px solid var(--chalk) }
+
+@media (max-width: 1100px) { .readout .opt { display: none } }
+@media (max-width: 900px) {
+  .bar .in { grid-template-columns: 1fr auto }
+  .bar nav { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; margin-left: -12px }
+  .bench, .row { grid-template-columns: 1fr }
+  .process { grid-template-columns: 1fr 1fr }
+}
+@media (max-width: 600px) {
+  body { font-size: 11.5px }
+  .readout { display: none }
+  .hot .lbl { display: none }
+  .phone-menu { display: flex }
+  .process { grid-template-columns: 1fr }
+  .projector { grid-template-columns: 1fr; justify-items: start }
+  .plotgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px }
+  .page { padding-block: 40px 60px }
+  .yard { width: 94vw }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo" viewBox="0 0 512 525">
+      <path d="M291.0 522.3 L221.0 522.5 L204.0 519.0 L200.0 521.5 L194.6 519.0 L187.5 512.0 L189.0 508.0 L186.0 505.5 L140.0 505.5 L136.0 508.3 L129.0 509.7 L124.0 514.3 L121.0 514.5 L104.0 505.5 L60.6 505.0 L59.5 486.0 L61.0 483.7 L181.0 483.5 L187.0 486.5 L190.0 484.4 L190.5 482.0 L190.3 477.0 L187.0 473.0 L195.0 464.7 L200.0 462.5 L204.0 465.0 L224.0 461.5 L227.0 459.0 L224.0 456.5 L203.0 455.4 L202.5 426.0 L200.0 422.7 L167.0 422.5 L160.0 418.7 L157.0 420.0 L150.0 413.7 L71.0 365.7 L66.0 363.0 L62.0 363.5 L45.7 345.0 L45.3 337.0 L20.7 283.0 L16.3 270.0 L14.0 267.7 L9.0 268.3 L5.5 265.0 L6.3 259.0 L1.5 250.0 L2.0 221.3 L6.0 223.5 L52.0 223.5 L56.3 221.0 L56.5 177.0 L63.7 142.0 L71.7 120.0 L81.7 100.0 L104.5 68.0 L130.6 43.0 L156.0 25.7 L186.0 11.7 L201.0 6.7 L225.0 1.5 L286.0 1.5 L302.0 4.7 L335.0 15.7 L355.0 25.7 L375.4 39.0 L386.0 47.5 L412.0 74.6 L426.3 95.0 L439.3 120.0 L448.3 145.0 L453.5 169.0 L455.5 186.0 L455.0 221.4 L458.0 223.5 L499.0 223.5 L506.0 219.5 L509.5 222.0 L509.5 250.0 L504.7 259.0 L506.0 264.0 L502.0 268.3 L497.0 267.7 L494.7 270.0 L490.3 283.0 L465.7 337.0 L465.3 345.0 L453.5 357.0 L452.5 360.0 L448.0 364.3 L445.0 363.0 L440.0 365.7 L374.0 405.7 L361.0 413.7 L354.0 420.0 L351.0 418.7 L344.0 422.5 L312.0 422.7 L309.5 426.0 L309.0 455.4 L287.0 456.5 L284.0 459.0 L287.0 461.5 L307.0 465.0 L311.0 462.5 L316.0 464.7 L324.0 473.0 L320.7 477.0 L320.5 482.0 L321.0 484.4 L324.0 486.5 L330.0 483.5 L450.0 483.7 L451.5 486.0 L451.0 504.4 L449.0 505.5 L407.0 505.5 L390.0 514.5 L387.0 514.3 L382.0 509.7 L375.0 508.3 L371.0 505.5 L325.0 505.5 L322.0 508.0 L323.5 512.0 L314.0 520.3 L311.0 521.5 L307.0 519.0 L291.0 522.3Z M163.5 402.0 L163.5 400.0 L158.0 394.5 L121.0 362.5 L117.0 362.5 L114.0 359.0 L114.0 356.6 L104.7 347.0 L103.7 341.0 L108.3 335.0 L92.7 316.0 L80.7 297.0 L69.7 274.0 L63.5 256.0 L60.0 253.5 L30.0 254.5 L27.0 258.0 L33.3 265.0 L33.7 274.0 L61.3 335.0 L61.0 338.0 L64.5 345.0 L68.0 347.0 L71.0 346.5 L79.0 353.3 L158.0 401.3 L162.0 403.0 L163.5 402.0Z M351.5 402.0 L432.0 353.3 L440.0 346.5 L443.0 347.0 L446.5 345.0 L450.0 338.0 L449.7 335.0 L477.3 274.0 L477.7 265.0 L484.0 258.0 L481.0 254.5 L452.0 253.5 L448.5 255.0 L439.3 279.0 L429.3 299.0 L418.0 316.4 L402.7 335.0 L407.3 341.0 L406.3 347.0 L347.0 401.0 L349.0 403.0 L351.5 402.0Z M315.4 409.0 L347.0 381.5 L347.5 379.0 L344.0 378.7 L311.0 392.5 L309.5 395.0 L309.7 407.0 L312.0 409.3 L315.4 409.0Z M200.4 409.0 L202.5 404.0 L202.5 395.0 L200.4 392.0 L168.0 379.3 L165.5 380.0 L165.5 382.0 L170.0 386.5 L195.6 409.0 L200.4 409.0Z" fill="var(--logo, var(--chalk))" fill-rule="evenodd"/>
+    </symbol>
+    <symbol id="mini" viewBox="0 0 24 24">
+      <path d="M2 13 L7 20 H17 L22 13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+      <circle cx="12" cy="10" r="7.5" fill="var(--hue)" stroke="currentColor" stroke-width="1.3"/>
+      <rect x="1.5" y="11.5" width="21" height="3" rx="1.5" fill="#0c0a09" stroke="currentColor" stroke-width="1.1"/>
+      <rect x="9" y="19" width="6" height="3.4" fill="#0c0a09" stroke="currentColor" stroke-width="1.1"/>
+    </symbol>
+    <radialGradient id="halo"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+  </defs>
+</svg>
+
+<header class="bar">
+  <div class="in">
+    <a class="home" href="#home" aria-label="B(aerial), home">
+      <svg aria-hidden="true"><use href="#logo"/></svg>
+      <span class="caps">The Manhattan Sky</span>
+    </a>
+    <nav aria-label="Pages" class="caps">
+      <a href="#mission" data-sec="mission">Mission</a>
+      <a href="#lay-1" data-sec="lay">Lay to Rest</a>
+      <a href="#plots" data-sec="plots">The Plots</a>
+    </nav>
+    <div class="readout caps num" aria-label="Status">
+      <span>Load <b id="ro-load">—</b></span>
+      <span class="opt"><b id="ro-clock">--:--</b> NYC</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section class="page cover" data-view="home" aria-labelledby="home-t">
+    <div class="annot caps num" aria-hidden="true"><span>⌜ Frame 0001 · A–01</span><span>40.7831° N · 73.9712° W ⌝</span></div>
+    <h1 class="vh" id="home-t" tabindex="-1">B(aerial) Site</h1>
+    <span class="bron mark" data-k="mark" aria-hidden="true"></span>
+    <span class="bron site" data-k="site" aria-hidden="true"></span>
+    <div class="yard" role="group" aria-label="Three burial devices floating over the clouds">
+      <img src="cover-devices.webp" alt="" width="2000" height="532">
+      <span class="tint" aria-hidden="true"></span>
+      <span class="halo" aria-hidden="true"></span>
+      <a class="hot" href="#mission" style="--x:10.8%" aria-label="Mission"><span class="lbl caps" aria-hidden="true">01 / Mission</span></a>
+      <a class="hot" href="#lay-1" style="--x:49.7%" aria-label="Lay to rest"><span class="lbl caps" aria-hidden="true">02 / Lay to Rest</span></a>
+      <a class="hot" href="#plots" style="--x:89%" aria-label="The plots"><span class="lbl caps" aria-hidden="true">03 / The Plots</span></a>
+    </div>
+    <div class="clouds" aria-hidden="true"><i class="c2"></i><i class="c1"></i></div>
+    <nav class="phone-menu" aria-label="Choose a device"><a class="pill ghost" href="#mission">Mission</a><a class="pill ghost" href="#lay-1">Lay to Rest</a><a class="pill ghost" href="#plots">The Plots</a></nav>
+    <div class="foot caps num"><span>Digital burial ground · Est. 2026</span><span id="cover-status"></span></div>
+  </section>
+
+  <!-- MISSION -->
+  <section class="page wrap mission" data-view="mission" aria-labelledby="mission-t" hidden>
+    <div style="display:grid;justify-items:center">
+      <p class="caps kicker" id="mission-t" tabindex="-1">Mission</p>
+      <blockquote style="margin-top:34px">A new thanatic ritual that memorializes and celebrates the identities that we cultivate digitally throughout our lifetimes.</blockquote>
+      <p class="sig caps">B(aerial) · The Manhattan Sky</p>
+      <div class="process">
+        <figure class="glass"><div class="art" style="background:#1d1715"><img src="box_dissect_dark.gif" alt="An empty frame rises and is divided into a grid of pixels" loading="lazy"></div><figcaption><span class="caps kicker">01</span><span>Their photos arrive and are divided into pixels.</span></figcaption></figure>
+        <figure class="glass"><div class="art"><img src="for_1b_animated.gif" alt="Grid cells flicker, then only the true colors remain" loading="lazy"></div><figcaption><span class="caps kicker">02</span><span>Each pixel's color is extracted.</span></figcaption></figure>
+        <figure class="glass"><div class="art"><img src="hue_compare.gif" alt="Pixels are sampled by hex and merged into one common color" loading="lazy"></div><figcaption><span class="caps kicker">03</span><span>The most abundant color is matched to our periodic table of colors.</span></figcaption></figure>
+        <figure class="glass"><div class="art" style="background:#29211e"><img src="device.gif" alt="The burial device, a sphere of lit mist" loading="lazy"></div><figcaption><span class="caps kicker">04</span><span>The heat makes mist, lit in that color above the city for twenty hours.</span></figcaption></figure>
+      </div>
+      <section class="spec" aria-label="Technical overview">
+        <h4>Technical overview</h4>
+        <dl class="num">
+          <div><dt>Devices</dt><dd>125</dd><dd class="alt">Manhattan</dd></div>
+          <div><dt>Rest period</dt><dd>20<small>h</small></dd><dd class="alt">1,200<small>min</small></dd></div>
+          <div><dt>Resolution</dt><dd>12 × 8<small>px</small></dd><dd class="alt">96<small>cells</small></dd></div>
+          <div><dt>Palette</dt><dd>19<small>elements</small></dd><dd class="alt">01 – 69</dd></div>
+          <div><dt>Coverage</dt><dd>59.1<small>km²</small></dd><dd class="alt">22.8<small>mi²</small></dd></div>
+          <div><dt>Established</dt><dd>2026</dd><dd class="alt">Est.</dd></div>
+        </dl>
+      </section>
+      <div style="margin-top:56px"><a class="pill" href="#lay-1">Lay someone to rest</a></div>
+    </div>
+  </section>
+
+  <!-- LAY TO REST 1 -->
+  <section class="page wrap" data-view="lay-1" aria-labelledby="l1-t" hidden>
+    <p class="caps kicker">Lay to rest</p>
+    <h2 class="title" id="l1-t" tabindex="-1">Who are they?</h2>
+    <nav class="stepper caps" aria-label="Steps"></nav>
+    <div class="sheet glass">
+      <div class="row">
+        <div class="field"><label class="caps" for="f-name">Name</label><input type="text" id="f-name" maxlength="60" autocomplete="off" placeholder="Rosalind Okafor"></div>
+        <div class="field"><label class="caps" for="f-born">Born</label><input type="number" id="f-born" min="1800" max="2026" inputmode="numeric" placeholder="1941"></div>
+        <div class="field"><label class="caps" for="f-died">Passed</label><input type="number" id="f-died" min="1800" max="2026" inputmode="numeric" placeholder="2025"></div>
+      </div>
+      <p class="err" id="err-1" role="alert"></p>
+      <div class="actions"><span class="caps kicker num">01 / 03</span><div class="right"><button class="pill" type="button" id="next-1">Continue</button></div></div>
+    </div>
+  </section>
+
+  <!-- LAY TO REST 2 -->
+  <section class="page wrap" data-view="lay-2" aria-labelledby="l2-t" hidden>
+    <p class="caps kicker">Lay to rest</p>
+    <h2 class="title" id="l2-t" tabindex="-1">Their files</h2>
+    <nav class="stepper caps" aria-label="Steps"></nav>
+    <div class="sheet glass">
+      <label class="drop" id="drop" for="f-files">
+        <strong>Drop them here</strong>
+        <span>or click to choose · up to 24 photos or files</span>
+        <input type="file" id="f-files" multiple aria-label="Photos and files">
+      </label>
+      <ul class="filelist" id="filelist" aria-live="polite"></ul>
+      <p class="private">The photos never leave this device. Only their remains are kept: a 12 × 8 grid of pixels, the color sent to the projectors, and the name and dates you gave. No account is needed.</p>
+      <p class="err" id="err-2" role="alert"></p>
+      <div class="actions"><a class="pill ghost" href="#lay-1">Back</a><div class="right"><button class="pill" type="button" id="next-2">Begin decomposition</button></div></div>
+    </div>
+  </section>
+
+  <!-- LAY TO REST 3 -->
+  <section class="page wrap" data-view="lay-3" aria-labelledby="l3-t" hidden>
+    <p class="caps kicker">Lay to rest</p>
+    <h2 class="title" id="l3-t" tabindex="-1">Decomposition</h2>
+    <nav class="stepper caps" aria-label="Steps"></nav>
+    <div class="sheet glass">
+      <div class="bench">
+        <div>
+          <canvas id="stage" width="600" height="400" aria-label="Decomposition stage"></canvas>
+          <p class="statusline caps num" id="statusline">Standing by</p>
+          <p class="status" id="bench-status" aria-live="polite"></p>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+        <div style="display:grid;gap:16px;min-width:0">
+          <div class="projector glass" id="projector" hidden>
+            <div class="orbit" id="orbit"></div>
+            <div><p class="caps kicker">Sent to the projectors</p><p class="nm" id="pj-name"></p><div class="meta num" id="pj-meta"></div></div>
+          </div>
+          <div class="ptable glass">
+            <div class="cap"><span class="caps">Periodic table of colors</span><span class="caps num" id="pt-count"></span></div>
+            <div class="cells" id="cells"></div>
+            <p class="legendline" id="pt-legend">Every pixel is compared to these colors. The most abundant match is sent to the projectors.</p>
+          </div>
+          <dl class="placement" id="placement" hidden>
+            <div><dt class="caps">In line</dt><dd id="pl-q"></dd></div>
+            <div><dt class="caps">Device</dt><dd id="pl-d"></dd></div>
+            <div><dt class="caps">Begins</dt><dd id="pl-s"></dd></div>
+            <div><dt class="caps">Returns</dt><dd id="pl-e"></dd></div>
+          </dl>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="pill ghost" href="#lay-2" id="back-3">Back</a>
+        <div class="right">
+          <button class="pill ghost" type="button" id="replay">Replay</button>
+          <button class="pill" type="button" id="lay" hidden>Lay to rest</button>
+          <button class="pill" type="button" id="see" hidden>See their place in the sky</button>
+          <button class="pill ghost" type="button" id="again" hidden>Lay someone else to rest</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLOTS -->
+  <section class="page wrap" data-view="plots" aria-labelledby="plots-t" hidden>
+    <p class="caps kicker">125 devices floating above Manhattan</p>
+    <div class="plots-head">
+      <h2 class="title" id="plots-t" tabindex="-1">The Plots</h2>
+      <div class="ledger" id="ledger"></div>
+    </div>
+    <div class="map" id="map">
+      <svg id="mapsvg" viewBox="0 150 1000 490" role="img" aria-label="Manhattan seen from above the harbor, with 125 burial devices floating over it at different heights; lit devices are holding a burial"></svg>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <div class="legend caps"><span><i style="background:var(--light);box-shadow:0 0 8px var(--light)"></i>Holding a burial, lit in its color</span><span><i style="border:1px solid var(--soft)"></i>Free</span></div>
+    <div class="yours glass" id="yours" hidden></div>
+    <div class="named" id="named" hidden>
+      <h3>Recently laid to rest</h3>
+      <div class="plotgrid" id="plot-grid"></div>
+    </div>
+    <p class="private" id="plots-note" style="margin-top:24px" hidden></p>
+  </section>
+</main>
+
+<dialog id="grave" aria-labelledby="g-name">
+  <div class="g-inner">
+    <div class="g-top">
+      <div><p class="caps kicker num" id="g-plot"></p><h3 id="g-name"></h3><p class="caps num" id="g-years" style="margin-top:6px;color:var(--soft)"></p></div>
+      <button class="x" type="button" id="g-close" aria-label="Close">×</button>
+    </div>
+    <canvas id="g-residue" width="12" height="8" aria-label="Pixel remains"></canvas>
+    <div class="projector glass" style="padding:14px"><div class="orbit" id="g-orbit" style="width:60px"></div><div><p class="caps kicker">Projected color</p><p class="nm" id="g-color" style="font-size:24px"></p><div class="meta num" id="g-cmeta"></div></div></div>
+    <div class="g-meta" id="g-meta"></div>
+    <div class="g-actions"><button class="pill ghost" type="button" id="g-find">Find in the sky</button><button class="pill ghost" type="button" id="g-remove" hidden>Remove plot</button></div>
+    <div class="confirm" id="g-confirm" hidden>
+      <span>Remove this plot for everyone?</span>
+      <button class="pill" type="button" id="g-yes">Remove</button>
+      <button class="pill ghost" type="button" id="g-no">Keep</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const HOURS = 20, MS_H = 3600e3, DEVICES = 125;
+  const sleep = ms => new Promise(r => setTimeout(r, reduced ? Math.min(ms, 30) : ms));
+  const svgEl = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.append(e); return e; };
+  const pad2 = n => String(n).padStart(2, '0'), pad3 = n => String(n).padStart(3, '0');
+  const fmtN = n => n.toLocaleString('en-US');
+
+  /* ---------- Bron mark ---------- */
+  const BRON = {"mark":{"d":"M198 0C171 0 150 21 150 47V526H245V364H386C463 364 526 427 526 504C526 582 463 645 386 645H91C84 645 77 644 71 641L157 727C165 735 177 740 189 740H386C516 740 621 634 621 504C621 428 585 360 529 317C566 284 589 236 589 182C589 81 508 0 407 0ZM56 113C48 121 43 133 43 146V585C43 612 64 633 91 633H386C457 633 514 575 514 504C514 433 457 376 386 376H257V471H386C404 471 419 486 419 504C419 523 404 538 386 538H138V47C138 40 140 33 142 27ZM407 95C455 95 494 134 494 182C494 230 455 269 407 269H245V95H407ZM257 107V202H393C413 202 429 218 429 239C429 244 428 250 426 255C458 246 482 217 482 182C482 152 465 126 439 114C429 109 419 107 407 107ZM982 -37C968 -37 954 -31 945 -19C853 110 806 270 806 433C806 534 828 644 867 740C867 740 871 754 871 761C871 788 849 816 815 816C810 816 806 815 801 814L800 815L929 891C937 896 947 899 957 899C988 899 1013 874 1013 843C1013 833 1010 823 1005 815C973 766 893 619 893 433C893 286 937 144 1016 32C1022 24 1024 16 1024 6C1024 -15 1006 -37 982 -37ZM805 45C796 50 788 59 783 69C752 138 707 264 707 433C707 589 746 710 777 781C784 795 799 804 815 804C839 804 858 785 858 761C858 756 857 750 855 746C839 699 794 594 794 433C794 266 841 104 941 -33L940 -34ZM1420 0C1399 0 1381 12 1374 31C1374 31 1161 623 1160 623C1152 646 1130 662 1105 662C1094 662 1085 659 1077 655L1076 656L1146 725C1155 734 1168 740 1183 740C1204 740 1224 727 1232 706L1317 471H1524L1564 583C1566 589 1567 596 1567 602C1568 633 1543 662 1508 662C1498 662 1489 660 1481 656L1480 657L1579 727C1590 735 1605 740 1620 740C1657 740 1692 710 1692 668C1692 660 1690 651 1687 644L1466 31C1459 12 1441 0 1420 0ZM1325 483 1290 578H1448L1463 619C1470 638 1488 650 1508 650C1535 650 1556 628 1556 603C1556 597 1555 592 1553 587L1515 483ZM1226 142C1220 147 1216 154 1213 161L1060 587C1058 592 1057 597 1057 602C1057 629 1079 650 1105 650C1125 650 1143 638 1150 619L1363 26ZM1368 364H1473L1420 218ZM1489 376H1351L1420 184ZM1761 113C1753 121 1748 133 1748 146V585C1748 612 1769 633 1796 633H2118C2145 633 2166 612 2166 585C2166 559 2145 538 2118 538H1843V47C1843 40 1845 33 1847 27ZM2177 575C2177 575 2178 578 2178 585C2178 618 2151 645 2118 645H1796C1789 645 1782 644 1776 641L1862 727C1870 735 1882 740 1894 740H2198C2231 740 2258 713 2258 681C2258 665 2251 650 2241 640C2241 640 2177 575 2177 575ZM2227 373C2222 375 2216 376 2210 376H1962V471H2109C2122 471 2134 466 2142 458L2227 373ZM1903 0C1876 0 1855 21 1855 47V526H1950V364H2210C2236 364 2258 343 2258 316C2258 290 2236 269 2210 269H1950V95H2210C2236 95 2258 74 2258 47C2258 21 2236 0 2210 0ZM2227 104C2222 106 2216 107 2210 107H1962V202H2109C2122 202 2134 197 2142 189L2227 104ZM2513 0C2486 0 2465 21 2465 47V585C2465 618 2438 645 2406 645C2400 645 2397 644 2397 644L2479 726C2488 735 2500 740 2513 740C2539 740 2560 719 2560 692V364H2610L2752 549C2762 562 2765 570 2765 586C2765 618 2736 645 2705 645C2701 645 2698 644 2698 644L2827 728C2839 736 2853 740 2868 740C2915 740 2942 702 2942 665C2942 649 2937 633 2927 621L2730 364C2827 360 2904 280 2904 182C2904 81 2823 0 2722 0ZM2371 113C2363 121 2358 133 2358 146V585C2358 612 2379 633 2406 633C2432 633 2453 612 2453 585V47C2453 40 2455 33 2457 27ZM2572 376V491L2667 614C2676 627 2691 634 2705 634C2730 634 2754 612 2754 586C2754 573 2752 567 2744 557L2604 376ZM2891 276C2867 322 2819 363 2752 373L2807 445C2858 410 2891 351 2891 284V276ZM2722 95C2770 95 2809 134 2809 182C2809 230 2770 269 2722 269H2560V95H2722ZM2572 107V202H2708C2728 202 2744 218 2744 239C2744 244 2743 250 2741 255C2773 246 2797 217 2797 182C2797 136 2759 107 2724 107ZM3152 0C3126 0 3105 21 3105 48V586C3105 619 3079 645 3045 645C3040 645 3036 644 3036 644L3118 726C3127 735 3139 740 3152 740C3179 740 3200 719 3200 693V48C3200 21 3179 0 3152 0ZM3011 113C3002 122 2997 133 2997 146V586C2997 612 3019 633 3045 633C3071 633 3093 612 3093 586V48C3093 40 3094 34 3096 27ZM3631 0C3610 0 3592 12 3585 31C3585 31 3372 623 3371 623C3363 646 3341 662 3316 662C3305 662 3296 659 3288 655L3287 656L3357 725C3366 734 3379 740 3394 740C3415 740 3435 727 3443 706L3528 471H3735L3775 583C3777 589 3778 596 3778 602C3779 633 3754 662 3719 662C3709 662 3700 660 3692 656L3691 657L3790 727C3801 735 3816 740 3831 740C3868 740 3903 710 3903 668C3903 660 3901 651 3898 644L3677 31C3670 12 3652 0 3631 0ZM3536 483 3501 578H3659L3674 619C3681 638 3699 650 3719 650C3746 650 3767 628 3767 603C3767 597 3766 592 3764 587L3726 483ZM3437 142C3431 147 3427 154 3424 161L3271 587C3269 592 3268 597 3268 602C3268 629 3290 650 3316 650C3336 650 3354 638 3361 619L3574 26ZM3579 364H3684L3631 218ZM3700 376H3562L3631 184ZM3985 113C3977 121 3972 133 3972 146V585C3972 612 3993 633 4020 633H4342C4369 633 4390 612 4390 585C4390 559 4369 538 4342 538H4067V47C4067 35 4071 27 4071 27ZM4401 575C4402 579 4402 582 4402 586C4402 618 4375 645 4342 645H4020C4011 645 4003 643 3995 639L3994 640L4081 726C4090 735 4102 740 4115 740H4422C4455 740 4482 714 4482 681C4482 665 4476 651 4466 640L4401 575ZM4127 0C4101 0 4079 21 4079 47V526H4175V47C4175 21 4153 0 4127 0ZM4661 -37C4639 -37 4617 -20 4617 6C4617 17 4620 23 4626 31C4711 138 4759 283 4759 431C4759 632 4671 773 4619 835C4608 848 4593 856 4575 856C4570 856 4565 855 4560 854L4559 855L4624 892C4632 897 4642 899 4651 899C4670 899 4684 890 4694 878C4718 848 4845 684 4845 428C4845 261 4792 101 4694 -21C4686 -31 4673 -37 4661 -37ZM4557 2C4542 12 4531 29 4531 49C4531 62 4535 73 4542 83C4561 109 4661 219 4661 431C4661 557 4619 675 4541 775C4533 786 4532 792 4532 801C4532 825 4552 844 4575 844C4588 844 4601 839 4610 828C4682 734 4747 605 4747 431C4747 281 4704 154 4617 40C4607 28 4604 17 4604 6C4604 -5 4609 -22 4624 -35L4623 -36Z","w":4891},"ticket":{"d":"M359 0C338 0 320 12 313 31C313 31 100 623 99 623C91 646 69 662 44 662C33 662 24 659 16 655L15 656L85 725C94 734 107 740 122 740C143 740 163 727 171 706L256 471H463L503 583C505 589 506 596 506 602C507 633 482 662 447 662C437 662 428 660 420 656L419 657L518 727C529 735 544 740 559 740C596 740 631 710 631 668C631 660 629 651 626 644L405 31C398 12 380 0 359 0ZM264 483 229 578H387L402 619C409 638 427 650 447 650C474 650 495 628 495 603C495 597 494 592 492 587L454 483ZM165 142C159 147 155 154 152 161L-1 587C-3 592 -4 597 -4 602C-4 629 18 650 44 650C64 650 82 638 89 619L302 26ZM307 364H412L359 218ZM428 376H290L359 184ZM835 0C808 0 787 21 787 47V526H882V95H944C1096 95 1219 218 1219 370C1219 522 1096 645 944 645H728C721 645 714 644 708 641L794 727C802 735 814 740 826 740H944C1148 740 1314 574 1314 370C1314 165 1148 0 944 0ZM693 113C685 121 680 133 680 146V585C680 612 701 633 728 633H944C1089 633 1207 515 1207 370C1207 225 1089 107 944 107H894V202H944C1037 202 1112 277 1112 370C1112 463 1037 538 944 538H775V47C775 40 777 33 779 27ZM1995 14C1995 14 1876 97 1875 97C1869 102 1864 108 1861 114L1683 477L1596 299V516L1639 604C1649 625 1666 633 1683 633C1701 633 1718 623 1726 606L1889 273V585C1889 612 1910 633 1937 633C1963 633 1984 612 1984 585C1984 585 1984 47 1984 47C1984 35 1988 24 1995 14ZM1395 113C1387 121 1382 133 1382 146V585C1382 611 1402 633 1430 633C1456 633 1477 612 1477 585V47C1477 40 1479 32 1481 27ZM1538 0C1508 0 1489 23 1489 49C1489 51 1489 585 1489 585C1489 618 1462 645 1430 645C1424 645 1421 644 1421 644L1503 726C1512 735 1524 740 1537 740C1563 740 1584 719 1584 692V248L1683 450L1736 342L1582 26C1574 11 1557 0 1538 0ZM1736 612C1726 632 1706 645 1683 645C1674 645 1662 642 1652 636C1652 636 1725 726 1725 726C1733 735 1743 740 1755 740C1771 740 1784 731 1790 718L1877 541V324ZM2044 0C2017 0 1996 21 1996 47V585C1996 618 1969 645 1937 645C1931 645 1928 644 1928 644L2010 726C2019 735 2031 740 2044 740C2070 740 2091 719 2091 692V47C2091 21 2070 0 2044 0ZM2339 0C2313 0 2292 21 2292 48V586C2292 619 2266 645 2232 645C2227 645 2223 644 2223 644L2305 726C2314 735 2326 740 2339 740C2366 740 2387 719 2387 693V48C2387 21 2366 0 2339 0ZM2198 113C2189 122 2184 133 2184 146V586C2184 612 2206 633 2232 633C2258 633 2280 612 2280 586V48C2280 40 2281 34 2283 27ZM2609 0C2582 0 2561 21 2561 47C2561 74 2582 95 2609 95H2766V585C2766 618 2740 645 2707 645C2702 645 2698 644 2698 644L2780 726C2789 734 2801 740 2814 740C2840 740 2862 719 2862 692V95H3020C3046 95 3067 74 3067 47C3067 21 3046 0 3020 0ZM2468 121C2459 129 2454 141 2454 154C2454 181 2475 202 2502 202H2659V585C2659 611 2681 633 2707 633C2733 633 2755 611 2755 585V107H2609C2576 107 2549 80 2549 47C2549 43 2550 39 2550 39ZM3040 103C3040 103 3032 107 3020 107H2873V202H2921C2934 202 2946 197 2954 189L3040 103ZM3696 -5C3496 -5 3408 155 3408 270C3408 520 3604 534 3626 535V534C3557 514 3487 434 3487 320C3487 185 3574 90 3698 90C3828 90 3961 207 3961 368C3961 506 3857 654 3643 654C3479 654 3319 543 3302 356H3301C3301 360 3301 364 3301 368C3301 577 3470 746 3679 746C3887 746 4056 577 4056 368C4056 155 3881 -5 3696 -5ZM3569 7C3433 48 3313 173 3313 330C3313 510 3465 643 3643 643C3848 643 3949 503 3949 368C3949 215 3823 102 3698 102C3575 102 3499 197 3499 320C3499 344 3502 361 3503 366H3504C3506 271 3583 193 3679 193C3771 193 3854 270 3854 368C3854 459 3784 548 3655 548C3525 548 3396 473 3396 270C3396 161 3468 52 3570 8L3569 7ZM4278 -1C4252 -1 4231 21 4231 47V585C4231 618 4204 644 4171 644C4168 644 4166 644 4163 644L4245 726C4253 734 4265 740 4278 740C4305 740 4326 718 4326 692V183L4513 416V263L4315 17C4307 6 4293 -1 4278 -1ZM4137 112C4129 121 4124 133 4124 145V585C4124 611 4145 633 4171 633C4198 633 4219 611 4219 585V47C4219 40 4220 33 4223 27ZM4538 112C4529 121 4524 133 4524 145V449L4338 216V369L4535 615C4544 626 4557 633 4572 633C4598 633 4620 611 4620 585V47C4620 40 4621 33 4623 27ZM4679 -1C4653 -1 4631 21 4631 47V585C4631 618 4605 644 4572 644C4569 644 4566 644 4563 644L4645 726C4654 734 4666 740 4679 740C4705 740 4727 718 4727 692V47C4727 21 4705 -1 4679 -1ZM4823 113C4815 121 4810 133 4810 146V585C4810 612 4831 633 4858 633H5180C5207 633 5228 612 5228 585C5228 559 5207 538 5180 538H4905V47C4905 40 4907 33 4909 27ZM5239 575C5239 575 5240 578 5240 585C5240 618 5213 645 5180 645H4858C4851 645 4844 644 4838 641L4924 727C4932 735 4944 740 4956 740H5260C5293 740 5320 713 5320 681C5320 665 5313 650 5303 640C5303 640 5239 575 5239 575ZM5289 373C5284 375 5278 376 5272 376H5024V471H5171C5184 471 5196 466 5204 458L5289 373ZM4965 0C4938 0 4917 21 4917 47V526H5012V364H5272C5298 364 5320 343 5320 316C5320 290 5298 269 5272 269H5012V95H5272C5298 95 5320 74 5320 47C5320 21 5298 0 5272 0ZM5289 104C5284 106 5278 107 5272 107H5024V202H5171C5184 202 5196 197 5204 189L5289 104Z","w":5347},"ground":{"d":"M198 0C171 0 150 21 150 47V526H245V95H307C459 95 582 218 582 370C582 522 459 645 307 645H91C84 645 77 644 71 641L157 727C165 735 177 740 189 740H307C511 740 677 574 677 370C677 165 511 0 307 0ZM56 113C48 121 43 133 43 146V585C43 612 64 633 91 633H307C452 633 570 515 570 370C570 225 452 107 307 107H257V202H307C400 202 475 277 475 370C475 463 400 538 307 538H138V47C138 40 140 33 142 27ZM897 0C871 0 850 21 850 48V586C850 619 824 645 790 645C785 645 781 644 781 644L863 726C872 735 884 740 897 740C924 740 945 719 945 693V48C945 21 924 0 897 0ZM756 113C747 122 742 133 742 146V586C742 612 764 633 790 633C816 633 838 612 838 586V48C838 40 839 34 841 27ZM1292 8C1155 48 1036 158 1036 315C1036 495 1188 633 1366 633H1508V305C1508 279 1486 257 1460 257C1434 257 1412 279 1412 305V534H1378C1248 534 1112 460 1112 257C1112 146 1188 55 1293 9L1292 8ZM1517 288C1517 288 1519 293 1519 303V645H1366C1195 645 1040 519 1026 341H1025C1025 341 1024 354 1024 362C1024 562 1193 740 1402 740H1567C1593 740 1615 719 1615 692V405C1615 393 1612 383 1602 373L1517 288ZM1420 -6C1255 -6 1123 115 1123 257C1123 447 1244 502 1318 516V515C1283 496 1197 429 1197 308C1197 179 1290 91 1421 91C1463 91 1505 103 1544 126C1550 129 1558 132 1567 132C1594 132 1615 110 1615 84C1615 67 1606 52 1592 43C1544 15 1483 -6 1420 -6ZM1421 103C1298 103 1209 185 1209 308C1209 323 1210 338 1213 352H1214C1216 257 1297 194 1395 194C1421 194 1445 201 1468 210C1476 213 1480 214 1486 214C1499 214 1511 207 1520 199L1576 143C1560 145 1548 141 1541 137C1516 123 1474 103 1421 103ZM1852 0C1826 0 1805 21 1805 48V586C1805 619 1779 645 1745 645C1740 645 1736 644 1736 644L1818 726C1827 735 1839 740 1852 740C1879 740 1900 719 1900 693V48C1900 21 1879 0 1852 0ZM1711 113C1702 122 1697 133 1697 146V586C1697 612 1719 633 1745 633C1771 633 1793 612 1793 586V48C1793 40 1794 34 1796 27ZM2122 0C2095 0 2074 21 2074 47C2074 74 2095 95 2122 95H2279V585C2279 618 2253 645 2220 645C2215 645 2211 644 2211 644L2293 726C2302 734 2314 740 2327 740C2353 740 2375 719 2375 692V95H2533C2559 95 2580 74 2580 47C2580 21 2559 0 2533 0ZM1981 121C1972 129 1967 141 1967 154C1967 181 1988 202 2015 202H2172V585C2172 611 2194 633 2220 633C2246 633 2268 611 2268 585V107H2122C2089 107 2062 80 2062 47C2062 43 2063 39 2063 39ZM2553 103C2553 103 2545 107 2533 107H2386V202H2434C2447 202 2459 197 2467 189L2553 103ZM2964 0C2943 0 2925 12 2918 31C2918 31 2705 623 2704 623C2696 646 2674 662 2649 662C2638 662 2629 659 2621 655L2620 656L2690 725C2699 734 2712 740 2727 740C2748 740 2768 727 2776 706L2861 471H3068L3108 583C3110 589 3111 596 3111 602C3112 633 3087 662 3052 662C3042 662 3033 660 3025 656L3024 657L3123 727C3134 735 3149 740 3164 740C3201 740 3236 710 3236 668C3236 660 3234 651 3231 644L3010 31C3003 12 2985 0 2964 0ZM2869 483 2834 578H2992L3007 619C3014 638 3032 650 3052 650C3079 650 3100 628 3100 603C3100 597 3099 592 3097 587L3059 483ZM2770 142C2764 147 2760 154 2757 161L2604 587C2602 592 2601 597 2601 602C2601 629 2623 650 2649 650C2669 650 2687 638 2694 619L2907 26ZM2912 364H3017L2964 218ZM3033 376H2895L2964 184ZM3298 113C3290 121 3285 133 3285 146V585C3285 612 3306 633 3333 633H3655C3682 633 3703 612 3703 585C3703 559 3682 538 3655 538H3380V47C3380 35 3384 27 3384 27ZM3714 575C3715 579 3715 582 3715 586C3715 618 3688 645 3655 645H3333C3324 645 3316 643 3308 639L3307 640L3394 726C3403 735 3415 740 3428 740H3735C3768 740 3795 714 3795 681C3795 665 3789 651 3779 640L3714 575ZM3440 0C3414 0 3392 21 3392 47V526H3488V47C3488 21 3466 0 3440 0ZM4209 0C4182 0 4161 21 4161 47V526H4256V364H4397C4474 364 4537 427 4537 504C4537 582 4474 645 4397 645H4102C4095 645 4088 644 4082 641L4168 727C4176 735 4188 740 4200 740H4397C4527 740 4632 634 4632 504C4632 428 4596 360 4540 317C4577 284 4600 236 4600 182C4600 81 4519 0 4418 0ZM4067 113C4059 121 4054 133 4054 146V585C4054 612 4075 633 4102 633H4397C4468 633 4525 575 4525 504C4525 433 4468 376 4397 376H4268V471H4397C4415 471 4430 486 4430 504C4430 523 4415 538 4397 538H4149V47C4149 40 4151 33 4153 27ZM4418 95C4466 95 4505 134 4505 182C4505 230 4466 269 4418 269H4256V95H4418ZM4268 107V202H4404C4424 202 4440 218 4440 239C4440 244 4439 250 4437 255C4469 246 4493 217 4493 182C4493 152 4476 126 4450 114C4440 109 4430 107 4418 107ZM5222 12C5195 12 5174 33 5174 60V431C5174 568 5063 679 4926 679C4828 679 4743 622 4703 539C4728 664 4839 758 4971 758C5143 758 5269 597 5269 431V60C5269 33 5248 12 5222 12ZM5080 125C5072 133 5067 145 5067 158C5067 158 5067 375 5067 431C5067 509 5004 572 4926 572C4849 572 4786 509 4786 431V60C4786 52 4787 45 4789 39L4703 125C4695 133 4690 145 4690 158V431C4690 561 4796 667 4926 667C5057 667 5162 561 5162 431V60C5162 47 5166 39 5166 39ZM4845 12C4819 12 4797 33 4797 60V431C4797 502 4855 560 4926 560C4938 560 4950 558 4961 555C4922 549 4893 516 4893 475V60C4893 33 4871 12 4845 12ZM5515 0C5488 0 5467 21 5467 47V585C5467 618 5440 645 5408 645C5402 645 5399 644 5399 644L5481 726C5490 735 5502 740 5515 740C5541 740 5562 719 5562 692V364H5612L5754 549C5764 562 5767 570 5767 586C5767 618 5738 645 5707 645C5703 645 5700 644 5700 644L5829 728C5841 736 5855 740 5870 740C5917 740 5944 702 5944 665C5944 649 5939 633 5929 621L5732 364C5829 360 5906 280 5906 182C5906 81 5825 0 5724 0ZM5373 113C5365 121 5360 133 5360 146V585C5360 612 5381 633 5408 633C5434 633 5455 612 5455 585V47C5455 40 5457 33 5459 27ZM5574 376V491L5669 614C5678 627 5693 634 5707 634C5732 634 5756 612 5756 586C5756 573 5754 567 5746 557L5606 376ZM5893 276C5869 322 5821 363 5754 373L5809 445C5860 410 5893 351 5893 284V276ZM5724 95C5772 95 5811 134 5811 182C5811 230 5772 269 5724 269H5562V95H5724ZM5574 107V202H5710C5730 202 5746 218 5746 239C5746 244 5745 250 5743 255C5775 246 5799 217 5799 182C5799 136 5761 107 5726 107ZM6134 0C6108 0 6087 21 6087 48V586C6087 619 6061 645 6027 645C6022 645 6018 644 6018 644L6100 726C6109 735 6121 740 6134 740C6161 740 6182 719 6182 693V48C6182 21 6161 0 6134 0ZM5993 113C5984 122 5979 133 5979 146V586C5979 612 6001 633 6027 633C6053 633 6075 612 6075 586V48C6075 40 6076 34 6078 27ZM6593 0C6572 0 6554 12 6547 31C6547 31 6334 623 6333 623C6325 646 6303 662 6278 662C6267 662 6258 659 6250 655L6249 656L6319 725C6328 734 6341 740 6356 740C6377 740 6397 727 6405 706L6490 471H6697L6737 583C6739 589 6740 596 6740 602C6741 633 6716 662 6681 662C6671 662 6662 660 6654 656L6653 657L6752 727C6763 735 6778 740 6793 740C6830 740 6865 710 6865 668C6865 660 6863 651 6860 644L6639 31C6632 12 6614 0 6593 0ZM6498 483 6463 578H6621L6636 619C6643 638 6661 650 6681 650C6708 650 6729 628 6729 603C6729 597 6728 592 6726 587L6688 483ZM6399 142C6393 147 6389 154 6386 161L6233 587C6231 592 6230 597 6230 602C6230 629 6252 650 6278 650C6298 650 6316 638 6323 619L6536 26ZM6541 364H6646L6593 218ZM6662 376H6524L6593 184ZM6927 113C6919 121 6914 133 6914 146V585C6914 612 6935 633 6962 633H7284C7311 633 7332 612 7332 585C7332 559 7311 538 7284 538H7009V47C7009 35 7013 27 7013 27ZM7343 575C7344 579 7344 582 7344 586C7344 618 7317 645 7284 645H6962C6953 645 6945 643 6937 639L6936 640L7023 726C7032 735 7044 740 7057 740H7364C7397 740 7424 714 7424 681C7424 665 7418 651 7408 640L7343 575ZM7069 0C7043 0 7021 21 7021 47V526H7117V47C7117 21 7095 0 7069 0ZM7935 8C7798 48 7679 158 7679 315C7679 495 7831 633 8009 633H8151V305C8151 279 8129 257 8103 257C8077 257 8055 279 8055 305V534H8021C7891 534 7755 460 7755 257C7755 146 7831 55 7936 9L7935 8ZM8160 288C8160 288 8162 293 8162 303V645H8009C7838 645 7683 519 7669 341H7668C7668 341 7667 354 7667 362C7667 562 7836 740 8045 740H8210C8236 740 8258 719 8258 692V405C8258 393 8255 383 8245 373L8160 288ZM8063 -6C7898 -6 7766 115 7766 257C7766 447 7887 502 7961 516V515C7926 496 7840 429 7840 308C7840 179 7933 91 8064 91C8106 91 8148 103 8187 126C8193 129 8201 132 8210 132C8237 132 8258 110 8258 84C8258 67 8249 52 8235 43C8187 15 8126 -6 8063 -6ZM8064 103C7941 103 7852 185 7852 308C7852 323 7853 338 7856 352H7857C7859 257 7940 194 8038 194C8064 194 8088 201 8111 210C8119 213 8123 214 8129 214C8142 214 8154 207 8163 199L8219 143C8203 145 8191 141 8184 137C8159 123 8117 103 8064 103ZM8498 0C8471 0 8450 21 8450 47V585C8450 618 8423 645 8391 645C8385 645 8382 644 8382 644L8464 726C8473 735 8485 740 8498 740C8524 740 8545 719 8545 692V364H8595L8737 549C8747 562 8750 570 8750 586C8750 618 8721 645 8690 645C8686 645 8683 644 8683 644L8812 728C8824 736 8838 740 8853 740C8900 740 8927 702 8927 665C8927 649 8922 633 8912 621L8715 364C8812 360 8889 280 8889 182C8889 81 8808 0 8707 0ZM8356 113C8348 121 8343 133 8343 146V585C8343 612 8364 633 8391 633C8417 633 8438 612 8438 585V47C8438 40 8440 33 8442 27ZM8557 376V491L8652 614C8661 627 8676 634 8690 634C8715 634 8739 612 8739 586C8739 573 8737 567 8729 557L8589 376ZM8876 276C8852 322 8804 363 8737 373L8792 445C8843 410 8876 351 8876 284V276ZM8707 95C8755 95 8794 134 8794 182C8794 230 8755 269 8707 269H8545V95H8707ZM8557 107V202H8693C8713 202 8729 218 8729 239C8729 244 8728 250 8726 255C8758 246 8782 217 8782 182C8782 136 8744 107 8709 107ZM9332 -5C9132 -5 9044 155 9044 270C9044 520 9240 534 9262 535V534C9193 514 9123 434 9123 320C9123 185 9210 90 9334 90C9464 90 9597 207 9597 368C9597 506 9493 654 9279 654C9115 654 8955 543 8938 356H8937C8937 360 8937 364 8937 368C8937 577 9106 746 9315 746C9523 746 9692 577 9692 368C9692 155 9517 -5 9332 -5ZM9205 7C9069 48 8949 173 8949 330C8949 510 9101 643 9279 643C9484 643 9585 503 9585 368C9585 215 9459 102 9334 102C9211 102 9135 197 9135 320C9135 344 9138 361 9139 366H9140C9142 271 9219 193 9315 193C9407 193 9490 270 9490 368C9490 459 9420 548 9291 548C9161 548 9032 473 9032 270C9032 161 9104 52 9206 8L9205 7ZM10287 12C10260 12 10239 33 10239 60V431C10239 568 10128 679 9991 679C9893 679 9808 622 9768 539C9793 664 9904 758 10036 758C10208 758 10334 597 10334 431V60C10334 33 10313 12 10287 12ZM10145 125C10137 133 10132 145 10132 158C10132 158 10132 375 10132 431C10132 509 10069 572 9991 572C9914 572 9851 509 9851 431V60C9851 52 9852 45 9854 39L9768 125C9760 133 9755 145 9755 158V431C9755 561 9861 667 9991 667C10122 667 10227 561 10227 431V60C10227 47 10231 39 10231 39ZM9910 12C9884 12 9862 33 9862 60V431C9862 502 9920 560 9991 560C10003 560 10015 558 10026 555C9987 549 9958 516 9958 475V60C9958 33 9936 12 9910 12ZM10579 -1C10553 -1 10532 21 10532 47V585C10532 618 10505 644 10472 644C10469 644 10467 644 10464 644L10546 726C10554 734 10566 740 10579 740C10606 740 10627 718 10627 692V183L10814 416V263L10616 17C10608 6 10594 -1 10579 -1ZM10438 112C10430 121 10425 133 10425 145V585C10425 611 10446 633 10472 633C10499 633 10520 611 10520 585V47C10520 40 10521 33 10524 27ZM10839 112C10830 121 10825 133 10825 145V449L10639 216V369L10836 615C10845 626 10858 633 10873 633C10899 633 10921 611 10921 585V47C10921 40 10922 33 10924 27ZM10980 -1C10954 -1 10932 21 10932 47V585C10932 618 10906 644 10873 644C10870 644 10867 644 10864 644L10946 726C10955 734 10967 740 10980 740C11006 740 11028 718 11028 692V47C11028 21 11006 -1 10980 -1ZM11279 0C11252 0 11231 21 11231 47V526H11326V95H11388C11540 95 11663 218 11663 370C11663 522 11540 645 11388 645H11172C11165 645 11158 644 11152 641L11238 727C11246 735 11258 740 11270 740H11388C11592 740 11758 574 11758 370C11758 165 11592 0 11388 0ZM11137 113C11129 121 11124 133 11124 146V585C11124 612 11145 633 11172 633H11388C11533 633 11651 515 11651 370C11651 225 11533 107 11388 107H11338V202H11388C11481 202 11556 277 11556 370C11556 463 11481 538 11388 538H11219V47C11219 40 11221 33 11223 27Z","w":11773},"site":{"d":"M273 -5C159 -5 80 67 80 164C80 248 129 316 242 354C346 389 367 449 367 503C367 582 295 666 162 666C106 666 62 657 25 637L24 638L112 716C129 731 155 746 216 746C359 746 463 628 463 503C463 332 320 280 265 261C225 247 176 221 176 166C176 119 212 90 273 90C331 90 380 118 396 118C423 118 444 97 444 70C444 51 434 35 416 27C405 22 339 -5 273 -5ZM144 18C62 54 6 135 6 229C6 413 203 453 225 460C255 471 260 491 260 503C260 524 232 558 162 558C113 558 94 550 76 543C70 540 63 538 56 538C29 538 8 559 8 586C8 604 18 620 34 628C58 640 91 654 162 654C288 654 356 576 356 503C356 445 329 396 238 365C120 324 69 253 69 164C69 87 113 41 145 19L144 18ZM273 102C222 102 187 125 187 163C187 189 196 203 207 214C225 205 250 190 299 200C322 204 339 198 350 188L418 127L417 126C411 128 404 130 396 130C373 130 329 102 273 102ZM712 0C686 0 665 21 665 48V586C665 619 639 645 605 645C600 645 596 644 596 644L678 726C687 735 699 740 712 740C739 740 760 719 760 693V48C760 21 739 0 712 0ZM571 113C562 122 557 133 557 146V586C557 612 579 633 605 633C631 633 653 612 653 586V48C653 40 654 34 656 27ZM1012 0C985 0 964 21 964 47C964 74 985 95 1012 95H1169V585C1169 618 1143 645 1110 645C1105 645 1101 644 1101 644L1183 726C1192 734 1204 740 1217 740C1243 740 1265 719 1265 692V95H1423C1449 95 1470 74 1470 47C1470 21 1449 0 1423 0ZM871 121C862 129 857 141 857 154C857 181 878 202 905 202H1062V585C1062 611 1084 633 1110 633C1136 633 1158 611 1158 585V107H1012C979 107 952 80 952 47C952 43 953 39 953 39ZM1443 103C1443 103 1435 107 1423 107H1276V202H1324C1337 202 1349 197 1357 189L1443 103ZM1568 113C1560 121 1555 133 1555 146V585C1555 612 1576 633 1603 633H1925C1952 633 1973 612 1973 585C1973 559 1952 538 1925 538H1650V47C1650 40 1652 33 1654 27ZM1984 575C1984 575 1985 578 1985 585C1985 618 1958 645 1925 645H1603C1596 645 1589 644 1583 641L1669 727C1677 735 1689 740 1701 740H2005C2038 740 2065 713 2065 681C2065 665 2058 650 2048 640C2048 640 1984 575 1984 575ZM2034 373C2029 375 2023 376 2017 376H1769V471H1916C1929 471 1941 466 1949 458L2034 373ZM1710 0C1683 0 1662 21 1662 47V526H1757V364H2017C2043 364 2065 343 2065 316C2065 290 2043 269 2017 269H1757V95H2017C2043 95 2065 74 2065 47C2065 21 2043 0 2017 0ZM2034 104C2029 106 2023 107 2017 107H1769V202H1916C1929 202 1941 197 1949 189L2034 104Z","w":2092}};
+  $$('.bron[data-k]').forEach(n => {
+    const g = BRON[n.dataset.k], pad = 90, H = 920;
+    const svg = svgEl('svg', { viewBox: `${-pad} ${-pad} ${g.w + pad * 2} ${H + pad * 2}`, 'aria-hidden': 'true', focusable: 'false' });
+    svgEl('path', { d: g.d, fill: '#efebe5', transform: 'translate(-40 48)', stroke: '#efebe5', 'stroke-width': 26, 'stroke-linejoin': 'round' }, svg);
+    svgEl('path', { d: g.d, fill: '#14100f', stroke: '#efebe5', 'stroke-width': 26, 'stroke-linejoin': 'round', 'paint-order': 'stroke' }, svg);
+    n.replaceChildren(svg);
+  });
+  const LIGHTS = [[127, 184, 230], [156, 143, 224], [108, 201, 184], [217, 179, 122], [213, 143, 176]];
+  const CYCLE = 40000;       // one full turn through the colours
+  function tickLight() {
+    const u = (Date.now() % CYCLE) / CYCLE * LIGHTS.length, i = Math.floor(u), f = u - i, e = f * f * (3 - 2 * f);
+    const a = LIGHTS[i], b = LIGHTS[(i + 1) % LIGHTS.length];
+    document.documentElement.style.setProperty('--light', rgbHex(...a.map((v, k) => v + (b[k] - v) * e)));
+  }
+  // drafting sheet headers, like a set of numbered plates
+  const SHEETS = { mission: ['01', 'Mission', '0101'], 'lay-1': ['02', 'Lay to rest · Name', '0201'], 'lay-2': ['02', 'Lay to rest · Files', '0202'], 'lay-3': ['02', 'Lay to rest · Decomposition', '0203'], plots: ['03', 'The plots', '0301'] };
+  for (const [v, [n, label, f]] of Object.entries(SHEETS)) {
+    const sec = $(`[data-view="${v}"]`); if (!sec) continue;
+    const h = document.createElement('div'); h.className = 'sheethead caps num'; h.setAttribute('aria-hidden', 'true'); h.style.width = '100%';
+    for (const t of [`${n} / ${label}`, '40.7831° N · 73.9712° W', `Frame ${f}`, `Sheet ${n} / 03`]) { const sp = document.createElement('span'); sp.textContent = t; h.append(sp); }
+    sec.prepend(h);
+  }
+  const clock = $('#ro-clock');
+  const tickClock = () => { clock.textContent = new Date().toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour12: false, hour: '2-digit', minute: '2-digit' }); };
+  tickClock(); setInterval(tickClock, 15000);
+  if (!reduced) { tickLight(); setInterval(() => { if (!document.hidden) tickLight(); }, 120); }
+
+  /* ---------- the periodic table of colors (from the board) ---------- */
+  const TABLE = [
+    [1, '#FFFFFF', 'White'], [3, '#FF0000', 'Bright red'], [7, '#AA00FF', 'Bright purple'], [20, '#AAAA00', 'Rich yellow'],
+    [21, '#AA5500', 'Rich orange'], [22, '#AA7100', 'Rich amber'], [23, '#AA3900', 'Rich vermilion'], [24, '#39AA00', 'Rich leaf green'],
+    [25, '#00AA00', 'Rich green'], [26, '#00AA39', 'Rich emerald'], [28, '#00AAAA', 'Rich cyan'], [29, '#0071AA', 'Rich sky blue'],
+    [37, '#800000', 'Deep red'], [38, '#808000', 'Deep yellow'], [39, '#804000', 'Deep orange'], [46, '#008080', 'Deep cyan'],
+    [47, '#005580', 'Deep sky blue'], [52, '#800080', 'Deep magenta'], [69, '#390055', 'Dark purple'],
+  ].map(([num, hex, name]) => ({ num, hex, name, rgb: hexRgb(hex) }));
+  const WHITE = TABLE[0];
+  const BY_NUM = Object.fromEntries(TABLE.map(e => [e.num, e]));
+  const LEGACY = { BrRd: 3, RiSb: 29, RiCy: 28, RiOr: 21, RiLg: 24, BrPr: 7, RiYl: 20, DpCy: 46, DpMg: 52, DpOr: 39, RiAm: 22, DpSb: 47, RiVm: 23, DpYl: 38, RiGr: 25, RiEm: 26, DpRd: 37, DkPr: 69, Wh: 1 };
+  const elOf = p => BY_NUM[p.element] || BY_NUM[LEGACY[p.code]] || WHITE;
+  function hexRgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+  function rgbHex(r, g, b) { return '#' + [r, g, b].map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('').toUpperCase(); }
+  function glowHex(e) { const [r, g, b] = e.rgb, m = Math.max(r, g, b, 1), k = Math.min(1.6, 215 / m); return rgbHex(r * k, g * k, b * k); }
+
+  // OKLab: compare colours the way eyes do, by hue first
+  const lin = c => { c /= 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  function oklch(r, g, b) {
+    r = lin(r); g = lin(g); b = lin(b);
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+    const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+    const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    const L = 0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s;
+    const A = 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s;
+    const B = 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s;
+    return [L, Math.hypot(A, B), Math.atan2(B, A)];
+  }
+  const CHROMA = TABLE.filter(e => e !== WHITE).map(e => ({ e, lch: oklch(...e.rgb) }));
+  function match(r, g, b) {
+    const [L, C, h] = oklch(r, g, b);
+    if (C < 0.045 || L < 0.2) return null;               // greys, black and white carry no light
+    let best = null, bd = Infinity;
+    for (const t of CHROMA) {
+      let dh = Math.abs(h - t.lch[2]); if (dh > Math.PI) dh = 2 * Math.PI - dh;
+      const d = (dh / Math.PI) ** 2 * 6 + (L - t.lch[0]) ** 2;
+      if (d < bd) { bd = d; best = t.e; }
+    }
+    return { e: best, w: C };
+  }
+
+  /* ---------- analysis ---------- */
+  const AW = 120, AH = 80;
+  const work = document.createElement('canvas'); work.width = AW; work.height = AH;
+  const wctx = work.getContext('2d', { willReadFrequently: true });
+  function coverDraw(ctx, src, w, h) { const sw = src.width || src.naturalWidth, sh = src.height || src.naturalHeight; const s = Math.max(w / sw, h / sh), dw = sw * s, dh = sh * s; ctx.drawImage(src, (w - dw) / 2, (h - dh) / 2, dw, dh); }
+  function analyze(src, bytes) {
+    wctx.clearRect(0, 0, AW, AH); coverDraw(wctx, src, AW, AH);
+    const px = wctx.getImageData(0, 0, AW, AH).data, weight = {};
+    let unlit = 0, lit = 0;
+    const cell = Array.from({ length: 96 }, () => [0, 0, 0]);
+    for (let y = 0; y < AH; y++) for (let x = 0; x < AW; x++) {
+      const i = (y * AW + x) * 4, r = px[i], g = px[i + 1], b = px[i + 2];
+      const c = cell[((y / 10) | 0) * 12 + ((x / 10) | 0)]; c[0] += r; c[1] += g; c[2] += b;
+      const m = match(r, g, b);
+      if (m) { weight[m.e.num] = (weight[m.e.num] || 0) + m.w; lit++; } else unlit++;
+    }
+    return { weight, unlit, lit, total: AW * AH, bytes,
+      residue: cell.map(([r, g, b]) => rgbHex(r / 100, g / 100, b / 100)),
+      tileEls: cell.map(([r, g, b]) => { const m = match(r / 100, g / 100, b / 100); return m ? m.e : null; }) };
+  }
+  function combine(results) {
+    const weight = {}; let unlit = 0, lit = 0, total = 0;
+    for (const r of results) { const k = r.bytes ? 0.35 : 1; for (const n in r.weight) weight[n] = (weight[n] || 0) + r.weight[n] * k; unlit += r.unlit * k; lit += r.lit * k; total += r.total * k; }
+    const sum = Object.values(weight).reduce((a, b) => a + b, 0);
+    const ranked = Object.entries(weight).sort((a, b) => b[1] - a[1]).map(([n, w]) => ({ e: BY_NUM[n], share: sum ? w / sum : 0 }));
+    const dominant = lit / total < 0.05 || !ranked.length ? WHITE : ranked[0].e;
+    return { ranked, unlitShare: unlit / total, dominant };
+  }
+  async function bytesCanvas(file) {
+    const need = AW * AH * 3, start = file.size > need * 2 ? Math.floor(file.size / 3) : 0;
+    const buf = new Uint8Array(await file.slice(start, start + need).arrayBuffer()), n = buf.length || 1;
+    const c = document.createElement('canvas'); c.width = AW; c.height = AH;
+    const ctx = c.getContext('2d'), id = ctx.createImageData(AW, AH);
+    for (let p = 0; p < AW * AH; p++) { const j = (p * 3) % n; id.data[p * 4] = buf[j] || 0; id.data[p * 4 + 1] = buf[(j + 1) % n] || 0; id.data[p * 4 + 2] = buf[(j + 2) % n] || 0; id.data[p * 4 + 3] = 255; }
+    ctx.putImageData(id, 0, 0); return c;
+  }
+  const loadImg = url => new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = url; });
+  async function toSource(file) {
+    if (file.type.startsWith('image/')) { const url = URL.createObjectURL(file); try { return { src: await loadImg(url), kind: 'image' }; } catch { URL.revokeObjectURL(url); } }
+    return { src: await bytesCanvas(file), kind: 'bytes' };
+  }
+
+  /* ---------- the periodic table ---------- */
+  const cellMap = {};
+  for (const e of TABLE) {
+    const d = document.createElement('div'); d.className = 'cell'; d.style.setProperty('--c', e.hex); d.title = `${e.name} · ${e.hex}`;
+    const n = document.createElement('span'); n.className = 'no'; n.textContent = pad2(e.num);
+    const pc = document.createElement('span'); pc.className = 'pc';
+    d.append(n, pc); $('#cells').append(d); cellMap[e.num] = { d, pc };
+  }
+  $('#pt-count').textContent = `${TABLE.length} elements`;
+  function resetTable() { for (const k in cellMap) { cellMap[k].d.className = 'cell'; cellMap[k].pc.textContent = ''; } $('#pt-legend').textContent = 'Every pixel is compared to these colors. The most abundant match is sent to the projectors.'; }
+  function lightTable(agg) {
+    resetTable();
+    for (const t of agg.ranked) { const c = cellMap[t.e.num]; if (t.share >= 0.02) { c.d.classList.add('on'); c.pc.textContent = Math.round(t.share * 100) + '%'; } }
+    cellMap[agg.dominant.num].d.classList.add('pick');
+    const top = agg.ranked.slice(0, 3).map(t => `${t.e.name.toLowerCase()} ${Math.round(t.share * 100)}%`).join(', ');
+    $('#pt-legend').textContent = top ? `Most abundant: ${top}. ${Math.round(agg.unlitShare * 100)}% of the pixels were grey, black or white and carry no light.` : 'No color was strong enough to light the mist, so the projectors run white.';
+  }
+  function paintColor(orb, nameEl, metaEl, e) {
+    orb.style.setProperty('--pc', glowHex(e)); nameEl.textContent = e.name; metaEl.replaceChildren();
+    for (const t of [`${e.hex} · RGB ${e.rgb.join(', ')}`, `Element ${pad2(e.num)} of the periodic table of colors`]) { const s = document.createElement('span'); s.textContent = t; metaEl.append(s); }
+  }
+
+  /* ---------- stage ---------- */
+  const stage = $('#stage'), st = stage.getContext('2d'), SW = 600, SH = 400;
+  const mini = document.createElement('canvas'), mctx = mini.getContext('2d');
+  function pixelate(src, cols, rows) { mini.width = cols; mini.height = rows; mctx.clearRect(0, 0, cols, rows); coverDraw(mctx, src, cols, rows); st.imageSmoothingEnabled = false; st.drawImage(mini, 0, 0, SW, SH); }
+  function gridLines(a = 0.9) { st.strokeStyle = `rgba(6,5,4,${a})`; st.lineWidth = 2; st.beginPath(); for (let c = 1; c < 12; c++) { st.moveTo(c * 50, 0); st.lineTo(c * 50, SH); } for (let r = 1; r < 8; r++) { st.moveTo(0, r * 50); st.lineTo(SW, r * 50); } st.stroke(); }
+  function drawCells(colors) { colors.forEach((c, i) => { if (!c) return; st.fillStyle = c; st.fillRect((i % 12) * 50, ((i / 12) | 0) * 50, 50, 50); }); }
+  function shade(hex) { const [r, g, b] = hexRgb(hex), m = (r + g + b) / 3; return rgbHex(m * .35 + r * .08, m * .35 + g * .08, m * .35 + b * .08); }
+  function residueTo(canvas, residue) { const c = canvas.getContext('2d'); residue.forEach((hex, i) => { c.fillStyle = hex; c.fillRect(i % 12, (i / 12) | 0, 1, 1); }); }
+  function idleStage() { st.fillStyle = '#000'; st.fillRect(0, 0, SW, SH); st.strokeStyle = 'rgba(239,235,229,.07)'; st.lineWidth = 1; st.beginPath(); for (let c = 1; c < 12; c++) { st.moveTo(c * 50, 0); st.lineTo(c * 50, SH); } for (let r = 1; r < 8; r++) { st.moveTo(0, r * 50); st.lineTo(SW, r * 50); } st.stroke(); }
+  idleStage();
+
+  let run = 0, current = null;
+  async function decompose(items) {
+    const my = ++run, alive = () => my === run, status = $('#bench-status'), line = $('#statusline');
+    ['#lay', '#see', '#again', '#projector', '#placement'].forEach(s => { $(s).hidden = true; });
+    $('#thumbs').replaceChildren(); resetTable();
+    const first = items[0];
+    line.textContent = '1A · Image received'; status.textContent = `Receiving ${items.length === 1 ? 'one file' : items.length + ' files'}.`;
+    for (const it of items) { if (!alive()) return; st.fillStyle = '#000'; st.fillRect(0, 0, SW, SH); st.imageSmoothingEnabled = true; coverDraw(st, it.src, SW, SH); await sleep(items.length > 1 ? 240 : 900); }
+    line.textContent = '1B · Pixel colors extracted'; status.textContent = 'Taking them apart, pixel by pixel.';
+    for (const it of items) {
+      for (const [c, r] of (it === first ? [[96, 64], [48, 32], [24, 16], [12, 8]] : [[24, 16], [12, 8]])) { if (!alive()) return; pixelate(it.src, c, r); await sleep(220); }
+      it.res = analyze(it.src, it.kind === 'bytes');
+    }
+    if (!alive()) return;
+    drawCells(first.res.residue); gridLines(); await sleep(500);
+    const th = $('#thumbs'); for (const it of items) { const c = document.createElement('canvas'); c.width = 12; c.height = 8; residueTo(c, it.res.residue); c.title = it.name; th.append(c); }
+    line.textContent = '1C · Compared to the periodic table of colors'; status.textContent = 'Comparing every pixel to the periodic table of colors.';
+    const order = [...Array(96).keys()].sort(() => Math.random() - 0.5), cells = first.res.residue.slice();
+    for (let k = 0; k < 96; k += 8) { if (!alive()) return; for (const i of order.slice(k, k + 8)) { const e = first.res.tileEls[i]; if (e) cells[i] = e.hex; } drawCells(cells); gridLines(); await sleep(110); }
+    const agg = combine(items.map(i => i.res)); lightTable(agg);
+    if (!alive()) return;
+    drawCells(cells.map((c, i) => first.res.tileEls[i] === agg.dominant ? agg.dominant.hex : shade(c))); gridLines(); await sleep(700);
+    if (!alive()) return;
+    line.textContent = '2D · Selected color projected onto suspended mist';
+    const gr = st.createRadialGradient(SW / 2, SH / 2, 8, SW / 2, SH / 2, SW * .62);
+    gr.addColorStop(0, glowHex(agg.dominant)); gr.addColorStop(.5, agg.dominant.hex); gr.addColorStop(1, '#000');
+    st.fillStyle = gr; st.fillRect(0, 0, SW, SH);
+    $('#projector').hidden = false; paintColor($('#orbit'), $('#pj-name'), $('#pj-meta'), agg.dominant);
+    return agg;
+  }
+
+  /* ---------- the burial queue: visitors' plots among the sky's other burials ---------- */
+  // The sky is never empty: other burials arrive through the day. They are generated the same way
+  // for every visitor from the clock, so everyone sees the same sky.
+  const OPEN = Date.UTC(2026, 0, 1, 5);
+  function rng(seed) { let s = seed % 2147483647; if (s <= 0) s += 2147483646; return () => (s = s * 16807 % 2147483647) / 2147483647; }
+  const SKY_COLORS = [29, 47, 28, 46, 1, 1, 21, 22, 39, 3, 37, 52, 69, 7, 25, 24, 26, 20, 38, 23];
+  function others(now) {
+    const out = [], h0 = Math.floor((now - 44 * MS_H) / MS_H), h1 = Math.floor(now / MS_H);
+    for (let h = h0; h <= h1; h++) {
+      const r = rng(h * 7919 + 13), hourOfDay = ((h % 24) + 24 - 5) % 24;
+      const k = 1 + Math.floor(r() * 3) + (hourOfDay > 9 && hourOfDay < 22 ? 1 : 0) + (r() < .5 ? 1 : 0);
+      for (let i = 0; i < k; i++) { const t = h * MS_H + r() * MS_H; const el = SKY_COLORS[Math.floor(r() * SKY_COLORS.length)]; if (t <= now) out.push({ createdAt: t, element: el, anon: true }); }
+    }
+    return { list: out, before: Math.floor((h0 * MS_H - OPEN) / MS_H * 4.6) };
+  }
+  /* ---------- earlier burials: an archive of invented plots so the ground isn't new ---------- */
+  // [name, born, died, element, files, hours before today's midnight]
+  const ARCHIVE_ROWS = [
+    ['Marguerite Ellison', 1938, 2026, 29, 14, -15], ['Desmond Achebe-Ward', 1951, 2026, 21, 6, -9], ['Lucía Ferreira Paz', 1944, 2025, 52, 22, -4],
+    ['Harold J. Kimura', 1929, 2026, 47, 3, -1], ['Abena Mensah', 1967, 2026, 22, 18, 3], ['Tomasz Wierzbicki', 1940, 2026, 46, 9, 7],
+    ['Ines Duarte', 1983, 2026, 3, 24, 11], ['Walter Pruitt', 1935, 2025, 1, 2, 16], ['Yuki Hasegawa', 1972, 2026, 28, 12, 22],
+    ['Rosemary Quinlan', 1946, 2026, 25, 7, 29], ['Samuel Okoro', 1958, 2026, 39, 15, 35], ['Clara Lindqvist', 1990, 2026, 7, 24, 41],
+    ['Francesco Bellini', 1933, 2025, 37, 5, 48], ['Dolores Whitfield', 1941, 2026, 69, 11, 56], ['Arjun Raman', 1964, 2026, 26, 19, 63],
+    ['Margot Delacroix', 1949, 2026, 20, 8, 71], ['Eleanor Voss', 1927, 2025, 1, 1, 80], ['Kwame Asante', 1955, 2026, 24, 16, 88],
+    ['Beatrice Lam', 1979, 2026, 29, 23, 97], ['Isaac Feldman', 1936, 2026, 38, 4, 109], ['Noor Haddad', 1987, 2026, 23, 20, 118],
+    ['Gerald Mott', 1945, 2025, 47, 6, 130], ['Ana Lucía Robles', 1960, 2026, 52, 13, 141], ['Peter Sørensen', 1939, 2026, 46, 10, 155],
+    ['Hattie Coleman', 1932, 2026, 21, 17, 168], ['Dmitri Volkov', 1953, 2026, 28, 9, 182], ['June Takahara', 1970, 2026, 25, 21, 197],
+    ['Ruth Abernathy', 1934, 2025, 37, 3, 213], ['Mateo Herrera', 1996, 2026, 3, 24, 230], ['Agnes O’Rourke', 1928, 2026, 1, 2, 246],
+    ['Viktor Nemeth', 1948, 2026, 39, 12, 265], ['Priya Chandran', 1975, 2026, 7, 18, 284], ['Lionel Baptiste', 1957, 2026, 22, 14, 302],
+    ['Hedda Brandt', 1942, 2025, 69, 6, 325], ['Osei Boateng', 1962, 2026, 26, 11, 347], ['Celeste Moreau', 1985, 2026, 29, 24, 372],
+    ['Frank DiMaggio Jr.', 1937, 2026, 38, 5, 398], ['Mei-Ling Chou', 1950, 2026, 20, 16, 425], ['Ezra Goldfarb', 1943, 2025, 47, 7, 455],
+    ['Solange Pierre', 1968, 2026, 52, 19, 486], ['Bernard Fitzhugh', 1930, 2026, 1, 1, 518], ['Yara Nascimento', 1992, 2026, 24, 22, 551],
+  ];
+  // a 12 x 8 grid that reads like a photo broken down: a sky band, a subject in the burial's colour, noise
+  function archiveResidue(seed, el) {
+    const r = rng(seed), base = BY_NUM[el].rgb, out = [];
+    const sky = [[150, 160, 172], [182, 170, 150], [118, 128, 140], [200, 196, 188]][Math.floor(r() * 4)];
+    const cx = 3 + r() * 6, cy = 3 + r() * 3, rad = 2 + r() * 3;
+    for (let y = 0; y < 8; y++) for (let x = 0; x < 12; x++) {
+      const d = Math.hypot((x - cx) / 1.2, y - cy), k = Math.max(0, 1 - d / rad);
+      const t = y / 7, n = (r() - .5) * 34;
+      const bg = sky.map((v, i) => v * (1 - t * .55) + [70, 62, 56][i] * t * .55);
+      const subj = base.map(v => v * .7 + 60);
+      out.push(rgbHex(...bg.map((v, i) => v * (1 - k) + subj[i] * k + n)));
+    }
+    return out;
+  }
+  function archive(now = Date.now()) {
+    const day = 24 * MS_H, nyMidnight = Math.floor((now - 4 * MS_H) / day) * day + 4 * MS_H;
+    return ARCHIVE_ROWS.map(([name, born, died, element, files, h], i) => ({
+      id: 'archive-' + i, archive: true, name, born, died, element, files,
+      createdAt: nyMidnight - h * MS_H, residue: archiveResidue(i * 977 + 31, element),
+    })).filter(p => p.createdAt <= now);
+  }
+  let ARCH = archive();
+  setInterval(() => { ARCH = archive(); }, 10 * 60000);
+  const allPlots = () => [...ARCH, ...plots];
+
+  let plots = [], sky = { holders: [], live: 0, wait: 0, total: 0, free: [], sims: 0, base: 0 };
+  // Visitors' plots keep the device and place in line they were given when laid to rest.
+  function skyState(now = Date.now()) {
+    const o = others(now), free = new Array(DEVICES).fill(0), holders = new Array(DEVICES).fill(null);
+    const pick = () => { let d = 0; for (let k = 1; k < DEVICES; k++) if (free[k] < free[d]) d = k; return d; };
+    const sims = o.list.sort((a, b) => a.createdAt - b.createdAt);
+    sims.forEach(p => { const d = pick(); const start = Math.max(p.createdAt, free[d]); Object.assign(p, { device: d + 1, start, end: start + HOURS * MS_H }); free[d] = p.end; });
+    const real = allPlots().sort((a, b) => a.createdAt - b.createdAt);
+    real.forEach((p, i) => {
+      if (!p.device) { const d = pick(); p.device = d + 1; p.start = Math.max(p.createdAt, free[d]); }
+      if (!p.start) p.start = p.createdAt;
+      p.end = p.start + HOURS * MS_H;
+      if (!p.queue) p.queue = o.before + sims.filter(x => x.createdAt <= p.createdAt).length + i + 1;
+      free[p.device - 1] = Math.max(free[p.device - 1], p.end);
+    });
+    let wait = 0;
+    for (const p of [...sims, ...real]) {
+      if (now < p.start) { wait++; continue; }
+      if (now >= p.end) continue;
+      const cur = holders[p.device - 1];
+      if (!cur || cur.anon) holders[p.device - 1] = p;      // a named plot shows over a private one
+    }
+    sky = { holders, free, live: holders.filter(Boolean).length, wait, total: o.before + sims.length + real.length, sims: sims.length, base: o.before };
+    return sky;
+  }
+  function previewSlot(now = Date.now()) {
+    const s = skyState(now); let d = 0; for (let k = 1; k < DEVICES; k++) if (s.free[k] < s.free[d]) d = k;
+    const start = Math.max(now, s.free[d]);
+    return { device: d + 1, start, end: start + HOURS * MS_H, queue: s.total + 1 };
+  }
+  const stateOf = (p, now = Date.now()) => now < p.start ? 'wait' : now < p.end ? 'live' : 'done';
+  const fmtLeft = ms => { const h = Math.floor(ms / MS_H), m = Math.max(0, Math.floor(ms % MS_H / 60000)); return h ? `${h}h ${m}m` : `${m}m`; };
+  const fmtDate = t => new Date(t).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  const years = p => p.born || p.died ? `${p.born ?? '?'} – ${p.died ?? '?'}` : '';
+
+  /* ---------- steps ---------- */
+  let picked = [], info = null, laid = null, focusPlot = null;
+  const STEPS = [['lay-1', 'Name'], ['lay-2', 'Files'], ['lay-3', 'Decomposition']];
+  function allowed(v) { if (v === 'lay-2') return !!info; if (v === 'lay-3') return !!(info && current); return true; }
+  function renderSteppers(view) {
+    const idx = STEPS.findIndex(s => s[0] === view);
+    $$('.stepper').forEach(nav => {
+      nav.replaceChildren();
+      STEPS.forEach(([v, label], i) => {
+        const a = document.createElement('a'); a.href = '#' + v;
+        const dot = document.createElement('i'); const t = document.createElement('span'); t.textContent = `${pad2(i + 1)} ${label}`;
+        a.append(dot, t);
+        if (i === idx) a.setAttribute('aria-current', 'step');
+        if (i < idx) a.classList.add('done');
+        if (!allowed(v) || (laid && i < 2)) a.setAttribute('aria-disabled', 'true');
+        nav.append(a);
+      });
+    });
+  }
+  function readInfo() {
+    const yr = v => { const n = parseInt(v, 10); return Number.isFinite(n) && n >= 1800 && n <= 2026 ? n : null; };
+    return { name: $('#f-name').value.trim().replace(/\s+/g, ' '), born: yr($('#f-born').value), died: yr($('#f-died').value) };
+  }
+  $('#next-1').addEventListener('click', () => {
+    const i = readInfo(), err = $('#err-1');
+    if (!i.name) { err.textContent = 'Add the name of the person you are laying to rest.'; $('#f-name').focus(); return; }
+    if (i.born && i.died && i.died < i.born) { err.textContent = 'The year they passed comes before the year they were born.'; return; }
+    err.textContent = ''; info = i; location.hash = 'lay-2';
+  });
+  $('#f-name').addEventListener('keydown', e => { if (e.key === 'Enter') $('#next-1').click(); });
+  const fileIn = $('#f-files'), drop = $('#drop');
+  function setFiles(list) {
+    picked = Array.from(list).slice(0, 24);
+    const ul = $('#filelist'); ul.replaceChildren();
+    for (const f of picked) { const li = document.createElement('li'); li.textContent = f.name; ul.append(li); }
+    if (list.length > 24) { const li = document.createElement('li'); li.textContent = `${list.length - 24} more left out (24 is the limit)`; ul.append(li); }
+    $('#err-2').textContent = '';
+  }
+  fileIn.addEventListener('change', () => setFiles(fileIn.files));
+  ['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => { if (e.dataTransfer?.files?.length) setFiles(e.dataTransfer.files); });
+  $('#next-2').addEventListener('click', async () => {
+    const err = $('#err-2');
+    if (!picked.length) { err.textContent = 'Add at least one photo or file.'; return; }
+    $('#next-2').disabled = true;
+    const items = [];
+    for (const f of picked) { try { items.push({ name: f.name, ...(await toSource(f)) }); } catch { /* unreadable */ } }
+    $('#next-2').disabled = false;
+    if (!items.length) { err.textContent = 'None of those files could be read. Try different files.'; return; }
+    current = { items, agg: null }; laid = null;
+    location.hash = 'lay-3';
+    runDecompose();
+  });
+  function showPlacement(p, preview) {
+    $('#placement').hidden = false;
+    $('#pl-q').textContent = `No. ${fmtN(p.queue)}`;
+    $('#pl-d').textContent = `${pad3(p.device)} of ${DEVICES}`;
+    $('#pl-s').textContent = p.start <= Date.now() + 60000 ? (preview ? 'Right away' : 'Now') : fmtDate(p.start);
+    $('#pl-e').textContent = fmtDate(p.end);
+  }
+  async function runDecompose() {
+    $('#l3-t').textContent = info.name;
+    const agg = await decompose(current.items);
+    if (!agg) return;
+    current.agg = agg;
+    $('#bench-status').textContent = `${info.name}'s photos came apart closest to ${agg.dominant.name.toLowerCase()}. When you lay them to rest, a device above the city will hold this light for twenty hours.`;
+    showPlacement(previewSlot(), true);
+    const lay = $('#lay'); lay.hidden = false; lay.disabled = false; lay.textContent = `Lay ${info.name.split(' ')[0]} to rest`;
+  }
+  $('#replay').addEventListener('click', () => { if (current && !laid) runDecompose(); });
+  $('#see').addEventListener('click', () => { focusPlot = laid; location.hash = 'plots'; });
+  $('#again').addEventListener('click', () => {
+    ['#f-name', '#f-born', '#f-died'].forEach(s => { $(s).value = ''; });
+    fileIn.value = ''; setFiles([]); info = null; current = null; laid = null;
+    $('#back-3').hidden = false; $('#replay').hidden = false; $('#l3-t').textContent = 'Decomposition'; idleStage();
+    location.hash = 'lay-1';
+  });
+
+  /* ---------- Manhattan from above the harbor, devices floating over it ---------- */
+  // Shoreline (lon, lat), clockwise from the Battery up the Hudson and back down the Harlem and East rivers.
+  const SHORE_PTS = () => SHORE;
+  const SHORE = [
+    [-74.0150, 40.7005], [-74.0180, 40.7040], [-74.0188, 40.7100], [-74.0160, 40.7175], [-74.0132, 40.7230], [-74.0125, 40.7290],
+    [-74.0108, 40.7360], [-74.0105, 40.7420], [-74.0102, 40.7480], [-74.0070, 40.7560], [-74.0035, 40.7620], [-73.9965, 40.7690],
+    [-73.9930, 40.7725], [-73.9885, 40.7810], [-73.9830, 40.7890], [-73.9765, 40.7985], [-73.9700, 40.8075], [-73.9620, 40.8190],
+    [-73.9575, 40.8265], [-73.9510, 40.8340], [-73.9470, 40.8430], [-73.9440, 40.8510], [-73.9395, 40.8575], [-73.9345, 40.8640],
+    [-73.9300, 40.8705], [-73.9265, 40.8760], [-73.9225, 40.8792], [-73.9160, 40.8775], [-73.9105, 40.8735], [-73.9130, 40.8680],
+    [-73.9175, 40.8620], [-73.9215, 40.8550], [-73.9250, 40.8440], [-73.9285, 40.8385], [-73.9335, 40.8295], [-73.9345, 40.8205],
+    [-73.9330, 40.8125], [-73.9305, 40.8045], [-73.9320, 40.7955], [-73.9370, 40.7900], [-73.9405, 40.7845], [-73.9425, 40.7750],
+    [-73.9505, 40.7660], [-73.9585, 40.7590], [-73.9665, 40.7495], [-73.9715, 40.7445], [-73.9725, 40.7340], [-73.9735, 40.7205],
+    [-73.9745, 40.7160], [-73.9790, 40.7110], [-73.9880, 40.7088], [-73.9985, 40.7070], [-74.0060, 40.7035], [-74.0125, 40.7008],
+  ];
+  const PARK = [[-73.9819, 40.7681], [-73.9730, 40.7644], [-73.9493, 40.7968], [-73.9582, 40.8005]];
+  const KX = Math.cos(40.79 * Math.PI / 180), ROT = -61 * Math.PI / 180;
+  // seen from above the Hudson: the island runs south (left) to north (right), the East Side recedes
+  const uv = (lon, lat) => { const x = (lon + 73.966) * KX, y = lat - 40.79; return [x * Math.cos(ROT) - y * Math.sin(ROT), x * Math.sin(ROT) + y * Math.cos(ROT)]; };
+  const UVB = (() => { const p = SHORE_PTS().map(([a, b]) => uv(a, b)); const us = p.map(q => q[0]), vs = p.map(q => q[1]); return { u0: Math.min(...us), u1: Math.max(...us), v0: Math.min(...vs), v1: Math.max(...vs) }; })();
+  function ground(lon, lat) {
+    const [u, v] = uv(lon, lat);
+    const depth = (UVB.v1 - v) / (UVB.v1 - UVB.v0);          // 0 at the Hudson edge, 1 at the East Side
+    const s = 1 - 0.18 * depth, S = 880 / (UVB.u1 - UVB.u0);
+    return { x: 500 + (u - (UVB.u0 + UVB.u1) / 2) * S * s, y: 560 - depth * 120, s, t: depth };
+  }
+  function inShore(lon, lat) { let c = false; for (let i = 0, j = SHORE.length - 1; i < SHORE.length; j = i++) { const [xi, yi] = SHORE[i], [xj, yj] = SHORE[j]; if ((yi > lat) !== (yj > lat) && lon < (xj - xi) * (lat - yi) / (yj - yi) + xi) c = !c; } return c; }
+  const map = $('#mapsvg'), markers = [];
+  const devRng = rng(4242);
+  (function drawMap() {
+    // drafting grid over the whole sheet
+    const dg = svgEl('g', { stroke: 'rgba(239,235,229,.06)', 'stroke-width': .6 }, map);
+    for (let x = 0; x <= 1000; x += 50) svgEl('line', { x1: x, x2: x, y1: 150, y2: 640 }, dg);
+    for (let y = 150; y <= 640; y += 50) svgEl('line', { x1: 0, x2: 1000, y1: y, y2: y }, dg);
+    const tick = (x, y, t, a = 'start') => { const e = svgEl('text', { x, y, 'text-anchor': a, fill: 'rgba(239,235,229,.3)', 'font-size': 8, 'font-family': 'Jost, Futura, sans-serif', 'letter-spacing': '2' }, map); e.textContent = t; };
+    'ABCDEFGHIJKLMNOPQRST'.split('').forEach((c, i) => tick(i * 50 + 4, 160, c));
+    for (let j = 1; j < 10; j++) tick(4, 150 + j * 50 - 4, String(j).padStart(2, '0'));
+    // the river as faint horizontal hatching, the island as a flat plate
+    const water = svgEl('g', { stroke: 'rgba(239,235,229,.07)', 'stroke-width': 1 }, map);
+    for (let y = 400; y <= 640; y += 6 + (y - 400) * 0.05) svgEl('line', { x1: 0, x2: 1000, y1: y.toFixed(1), y2: y.toFixed(1) }, water);
+    const pts = SHORE.map(([a, b]) => ground(a, b)).map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+    svgEl('polygon', { points: pts, fill: '#29211e', stroke: 'none' }, map);
+    svgEl('polygon', { points: pts, fill: 'rgba(239,235,229,.045)', stroke: 'rgba(239,235,229,.75)', 'stroke-width': 1.1, 'stroke-linejoin': 'round' }, map);
+    // avenues: lines along the island's grid, clipped to the shoreline
+    const clip = svgEl('clipPath', { id: 'isl' }, map); svgEl('polygon', { points: pts }, clip);
+    const av = svgEl('g', { 'clip-path': 'url(#isl)', stroke: 'rgba(239,235,229,.07)', 'stroke-width': .7 }, map);
+    const ang = 29 * Math.PI / 180;
+    for (let i = -9; i <= 9; i++) {
+      const lon0 = -73.985 + i * 0.0035, lat0 = 40.700, lat1 = 40.880;
+      const a = ground(lon0, lat0), b = ground(lon0 + (lat1 - lat0) * Math.tan(ang) / KX, lat1);
+      svgEl('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y }, av);
+    }
+    svgEl('polygon', { points: PARK.map(([a, b]) => ground(a, b)).map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' '), fill: 'rgba(239,235,229,.06)', stroke: 'rgba(239,235,229,.3)', 'stroke-width': .8 }, map);
+    const lab = (lon, lat, t, dx = 0, dy = 0, anchor = 'middle') => { const p = ground(lon, lat); const e = svgEl('text', { x: p.x + dx, y: p.y + dy, 'text-anchor': anchor, fill: 'rgba(239,235,229,.4)', 'font-size': 10, 'font-family': 'Jost, Futura, sans-serif', 'font-weight': 300, 'letter-spacing': '4' }, map); e.textContent = t; };
+    lab(-74.0165, 40.7005, 'BATTERY', -14, 4, 'end'); lab(-74.004, 40.756, 'MIDTOWN', 0, 26); lab(-73.9585, 40.783, 'CENTRAL PARK', 0, 30);
+    lab(-73.955, 40.821, 'HARLEM', 0, 26); lab(-73.9105, 40.8735, 'INWOOD', 14, 4, 'start');
+    const river = (x, y, t) => { const e = svgEl('text', { x, y, 'text-anchor': 'middle', fill: 'rgba(239,235,229,.28)', 'font-size': 12, 'font-style': 'italic', 'font-family': 'Old Standard TT, serif' }, map); e.textContent = t; };
+    river(500, 625, 'Hudson River'); river(930, 470, 'East River');
+    // scale bar (front edge) and north arrow
+    const A = ground(-74.0150, 40.7005), B = ground(-73.9225, 40.8792), kmPx = Math.hypot(B.x - A.x, B.y - A.y) / 21.6;
+    const sb = svgEl('g', { transform: 'translate(40 612)', stroke: 'rgba(239,235,229,.6)', 'stroke-width': .8 }, map);
+    svgEl('line', { x1: 0, x2: kmPx * 5, y1: 0, y2: 0 }, sb);
+    for (let k = 0; k <= 5; k++) { svgEl('line', { x1: k * kmPx, x2: k * kmPx, y1: -4, y2: 4 }, sb); const e = svgEl('text', { x: k * kmPx, y: -8, 'text-anchor': 'middle', fill: 'rgba(239,235,229,.45)', stroke: 'none', 'font-size': 8, 'font-family': 'Jost, Futura, sans-serif' }, sb); e.textContent = k === 0 ? '0 KM' : String(k); }
+    const na = svgEl('g', { transform: 'translate(930 220)', stroke: 'rgba(239,235,229,.6)', 'stroke-width': .9, fill: 'none' }, map);
+    svgEl('line', { x1: -26, x2: 18, y1: 0, y2: 0 }, na); svgEl('path', { d: 'M10 -5 L20 0 L10 5' }, na);
+    const nt = svgEl('text', { x: -34, y: 3.5, 'text-anchor': 'end', fill: 'rgba(239,235,229,.6)', stroke: 'none', 'font-size': 10, 'font-family': 'Jost, Futura, sans-serif', 'letter-spacing': '3' }, na); nt.textContent = 'N';
+
+    // 125 devices, each anchored over a point of the island at its own height
+    const anchors = [];
+    while (anchors.length < DEVICES) {
+      const lon = -74.020 + devRng() * 0.112, lat = 40.701 + devRng() * 0.177;
+      if (!inShore(lon, lat)) continue;
+      anchors.push({ lon, lat, h: 50 + devRng() * 260, r: 0.0012 + devRng() * 0.0026, w: (devRng() < .5 ? -1 : 1) * (2 * Math.PI) / ((50 + devRng() * 70) * 60000), ph: devRng() * Math.PI * 2, bob: 4 + devRng() * 8, bw: (2 * Math.PI) / ((14 + devRng() * 20) * 60000) });
+    }
+    // number them south to north, draw far ones first
+    for (let i = anchors.length - 1; i > 0; i--) { const j = Math.floor(devRng() * (i + 1)); [anchors[i], anchors[j]] = [anchors[j], anchors[i]]; }   // device numbers scattered across the island
+    const order = anchors.map((a, i) => i).sort((i, j) => ground(anchors[j].lon, anchors[j].lat).t - ground(anchors[i].lon, anchors[i].lat).t);
+    const shadowLayer = svgEl('g', {}, map), tetherLayer = svgEl('g', { stroke: 'rgba(239,235,229,.16)', 'stroke-width': .6, 'stroke-dasharray': '1.5 3' }, map), devLayer = svgEl('g', {}, map);
+    const made = new Array(DEVICES);
+    for (const i of order) {
+      const a = anchors[i];
+      const shadow = svgEl('ellipse', { rx: 5, ry: 1.6, fill: 'rgba(0,0,0,.45)' }, shadowLayer);
+      const tether = svgEl('line', {}, tetherLayer);
+      const g = svgEl('g', { class: 'm', tabindex: 0, role: 'button' }, devLayer);
+      svgEl('circle', { class: 'ring', r: 12, fill: 'none', stroke: 'none' }, g);
+      const halo = svgEl('circle', { r: 15, fill: '#fff', opacity: 0 }, g);
+      const u = svgEl('use', { href: '#mini', x: -9, y: -10, width: 18, height: 18 }, g);
+      made[i] = { g, u, halo, shadow, tether, a, n: i + 1, plot: null };
+    }
+    for (const m of made) {
+      markers.push(m);
+      m.g.addEventListener('mouseenter', () => tipFor(m)); m.g.addEventListener('focus', () => tipFor(m));
+      m.g.addEventListener('mouseleave', hideTip); m.g.addEventListener('blur', hideTip);
+      m.g.addEventListener('click', () => { if (m.plot && !m.plot.anon) openGrave(m.plot); });
+      m.g.addEventListener('keydown', ev => { if ((ev.key === 'Enter' || ev.key === ' ') && m.plot && !m.plot.anon) { ev.preventDefault(); openGrave(m.plot); } });
+    }
+    const hl = svgEl('g', { id: 'hl', opacity: 0, 'pointer-events': 'none' }, map);
+    svgEl('circle', { r: 17, fill: 'none', stroke: '#efebe5', 'stroke-width': .8 }, hl);
+    svgEl('line', { x1: 0, y1: -17, x2: 0, y2: -40, stroke: 'rgba(239,235,229,.5)', 'stroke-width': .8 }, hl);
+    const t = svgEl('text', { y: -47, 'text-anchor': 'middle', fill: '#efebe5', 'font-size': 12, 'font-family': 'Jost, Futura, sans-serif', 'font-weight': 300, 'letter-spacing': '3' }, hl); t.id = 'hl-t';
+  })();
+  const hl = $('#hl');
+  let hlMarker = null;
+  function placeMarkers() {
+    const now = Date.now();
+    for (const m of markers) {
+      const a = m.a, ang = a.ph + a.w * now;
+      const lon = a.lon + Math.cos(ang) * a.r / KX, lat = a.lat + Math.sin(ang) * a.r * 0.6;
+      const p = ground(lon, lat), h = (a.h + Math.sin(a.ph + a.bw * now) * a.bob) * p.s;
+      const x = p.x, y = p.y - h, sc = 0.55 + 0.55 * p.s;
+      m.x = x; m.y = y;
+      m.g.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)}) scale(${sc.toFixed(3)})`);
+      m.shadow.setAttribute('cx', x.toFixed(2)); m.shadow.setAttribute('cy', p.y.toFixed(2)); m.shadow.setAttribute('rx', (6 * sc).toFixed(2)); m.shadow.setAttribute('ry', (1.8 * sc).toFixed(2));
+      m.tether.setAttribute('x1', x.toFixed(2)); m.tether.setAttribute('x2', x.toFixed(2)); m.tether.setAttribute('y1', (y + 8 * sc).toFixed(2)); m.tether.setAttribute('y2', p.y.toFixed(2));
+    }
+    if (hlMarker) hl.setAttribute('transform', `translate(${hlMarker.x.toFixed(2)} ${hlMarker.y.toFixed(2)})`);
+  }
+  placeMarkers();
+  if (!reduced) setInterval(() => { if (!document.hidden && !$('[data-view="plots"]').hidden) placeMarkers(); }, 140);
+  const tip = $('#tip');
+  function tipFor(m) {
+    tip.replaceChildren();
+    const b = document.createElement('b'); b.textContent = `Device ${pad3(m.n)}`; tip.append(b);
+    const s = document.createElement('span');
+    if (!m.plot) s.textContent = 'Free';
+    else if (m.plot.anon) s.textContent = `Holding a private burial · ${elOf(m.plot).name.toLowerCase()} · ${fmtLeft(m.plot.end - Date.now())} left`;
+    else s.textContent = `${m.plot.name} · ${elOf(m.plot).name.toLowerCase()} · ${fmtLeft(m.plot.end - Date.now())} left`;
+    tip.append(s);
+    const r = m.g.getBoundingClientRect(), mr = $('#map').getBoundingClientRect();
+    tip.style.left = Math.min(Math.max(r.left + r.width / 2 - mr.left, 125), mr.width - 125) + 'px';
+    tip.style.top = (r.top - mr.top) + 'px'; tip.hidden = false;
+  }
+  function hideTip() { tip.hidden = true; }
+
+  function renderSky() {
+    const now = Date.now(); skyState(now);
+    markers.forEach(m => { m.plot = null; m.u.style.setProperty('--hue', '#0c0a09'); m.u.style.color = 'rgba(239,235,229,.3)'; m.halo.setAttribute('opacity', 0); m.g.setAttribute('aria-label', `Device ${pad3(m.n)}, free`); });
+    const live = sky.live, wait = sky.wait;
+    sky.holders.forEach((p, i) => {
+      if (!p) return;
+      const m = markers[i]; m.plot = p;
+      const c = glowHex(elOf(p));
+      m.u.style.setProperty('--hue', `color-mix(in srgb, ${c} 62%, #0c0a09)`); m.u.style.color = 'rgba(239,235,229,.5)';
+      m.halo.setAttribute('opacity', .28); m.halo.setAttribute('fill', c); m.halo.style.filter = 'blur(5px)';
+      m.g.setAttribute('aria-label', p.anon ? `Device ${pad3(m.n)}, holding a private burial` : `Device ${pad3(m.n)}, holding ${p.name}`);
+    });
+    const total = sky.total;
+    const L = $('#ledger'); L.replaceChildren();
+    for (const [n, label] of [[live, 'Lit now'], [DEVICES - live, 'Free'], [wait, 'Waiting'], [total, 'Laid to rest']]) {
+      const d = document.createElement('div'); const s = document.createElement('strong'); s.textContent = fmtN(n);
+      const l = document.createElement('span'); l.className = 'caps'; l.textContent = label; d.append(s, l); L.append(d);
+    }
+    $('#ro-load').textContent = `${pad3(live)}/${DEVICES}`;
+    $('#cover-status').textContent = `${live} of ${DEVICES} devices lit`;
+    // highlight
+    const target = focusPlot && plots.find(p => p.id === focusPlot.id) || focusPlot;
+    if (target && target.device) {
+      hlMarker = markers[target.device - 1]; hl.setAttribute('opacity', 1);
+      $('#hl-t').textContent = target.name.toUpperCase();
+      const y = $('#yours'); y.hidden = false; y.replaceChildren();
+      y.style.setProperty('--pc', glowHex(elOf(target)));
+      const dot = document.createElement('span'); dot.className = 'dot';
+      const b = document.createElement('b'); b.textContent = target.name;
+      const s1 = document.createElement('span'); s1.className = 'num'; s1.textContent = `Device ${pad3(target.device)} · No. ${fmtN(target.queue)} in line`;
+      const s2 = document.createElement('span'); const st2 = stateOf(target, now);
+      s2.textContent = st2 === 'wait' ? `Waiting for the device to clear, ${fmtDate(target.start)}` : st2 === 'live' ? `Lit in ${elOf(target).name.toLowerCase()} until ${fmtDate(target.end)}` : `Returned to the sky ${fmtDate(target.end)}`;
+      y.append(dot, b, s1, s2);
+    } else { hlMarker = null; hl.setAttribute('opacity', 0); $('#yours').hidden = true; }
+    placeMarkers();
+  }
+
+  /* ---------- named plots ---------- */
+  let db = null, user = null, uid = null, canEdit = false;
+  function renderPlots() {
+    renderSky();
+    const named = allPlots().filter(p => !p.anon).sort((a, b) => b.createdAt - a.createdAt);
+    $('#named').hidden = !named.length;
+    const grid = $('#plot-grid'); grid.replaceChildren();
+    for (const p of named.slice(0, 24)) {
+      const e = elOf(p), state = stateOf(p);
+      const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'plot' + (state === 'done' ? ' returned' : '');
+      btn.setAttribute('aria-label', `${p.name}, device ${p.device}, ${e.name}`);
+      const c = document.createElement('canvas'); c.width = 12; c.height = 8; residueTo(c, p.residue || []);
+      const body = document.createElement('div'); body.className = 'body';
+      const who = document.createElement('span'); who.className = 'who'; who.textContent = p.name;
+      const meta = document.createElement('span'); meta.className = 'meta'; meta.textContent = [years(p), `Device ${pad3(p.device)}`].filter(Boolean).join(' · ');
+      const col = document.createElement('span'); col.className = 'col'; col.style.setProperty('--c', glowHex(e)); const dot = document.createElement('i'); const cn = document.createElement('span'); cn.textContent = state === 'done' ? 'Returned to the sky' : e.name; col.append(dot, cn);
+      body.append(who, meta, col); btn.append(c, body);
+      btn.addEventListener('click', () => openGrave(p));
+      grid.append(btn);
+    }
+  }
+  const dlg = $('#grave'); let open = null;
+  function openGrave(p) {
+    open = p; hideTip();
+    const e = elOf(p), state = stateOf(p);
+    $('#g-plot').textContent = `Device ${pad3(p.device)} · No. ${fmtN(p.queue)}`;
+    $('#g-name').textContent = p.name; $('#g-years').textContent = years(p);
+    residueTo($('#g-residue'), p.residue || []);
+    paintColor($('#g-orbit'), $('#g-color'), $('#g-cmeta'), e);
+    const meta = $('#g-meta'); meta.replaceChildren();
+    for (const t of [`Laid to rest ${fmtDate(p.createdAt)} · ${p.files} file${p.files === 1 ? '' : 's'}`,
+      state === 'wait' ? `Waiting for device ${pad3(p.device)}, which clears ${fmtDate(p.start)}` : state === 'live' ? `Lit above the city until ${fmtDate(p.end)}` : `Returned to the sky ${fmtDate(p.end)}`]) {
+      const s = document.createElement('span'); s.textContent = t; meta.append(s);
+    }
+    $('#g-remove').hidden = !(p.local || (db && !p.archive && (canEdit || (uid && p.by === uid)))); $('#g-confirm').hidden = true;
+    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+  }
+  const closeDlg = () => { if (dlg.open) dlg.close(); };
+  $('#g-close').addEventListener('click', closeDlg);
+  dlg.addEventListener('click', e => { if (e.target === dlg) closeDlg(); });
+  $('#g-find').addEventListener('click', () => { focusPlot = open; closeDlg(); renderSky(); window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); });
+  $('#g-remove').addEventListener('click', () => { $('#g-confirm').hidden = false; $('#g-yes').focus(); });
+  $('#g-no').addEventListener('click', () => { $('#g-confirm').hidden = true; });
+  $('#g-yes').addEventListener('click', async () => {
+    if (!open) return; $('#g-yes').disabled = true;
+    if (open.local) { localPlots = localPlots.filter(p => p.id !== open.id); saveLocal(localPlots); mergePlots(); if (focusPlot && focusPlot.id === open.id) focusPlot = null; renderPlots(); closeDlg(); $('#g-yes').disabled = false; return; }
+    if (!db) { $('#g-yes').disabled = false; return; }
+    try { await db.collection('plots').doc(open.id).delete(); if (focusPlot && focusPlot.id === open.id) focusPlot = null; closeDlg(); }
+    catch { $('#g-confirm').firstElementChild.textContent = 'That plot could not be removed. You may not have permission.'; }
+    $('#g-yes').disabled = false;
+  });
+
+  // Visitors without a Claude account keep their plots in this browser
+  const LOCAL_KEY = 'baerial-plots';
+  const validPlot = p => p && typeof p.name === 'string' && typeof p.createdAt === 'number';
+  function loadLocal() { try { const v = JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); return Array.isArray(v) ? v.filter(validPlot).map(p => ({ ...p, local: true })) : []; } catch { return []; } }
+  function saveLocal(list) { try { localStorage.setItem(LOCAL_KEY, JSON.stringify(list.map(({ local, queue, ...p }) => ({ ...p, queue })))); return true; } catch { return false; } }
+  let localPlots = loadLocal(), shared = [];
+  const mergePlots = () => { plots = [...shared, ...localPlots]; };
+  async function keep(doc) {
+    if (db) { try { const ref = await db.collection('plots').add(doc); return { ...doc, id: ref.id }; } catch (err) { if (err && err.code === 'quota_exceeded') throw err; } }
+    const mine = { ...doc, id: 'local-' + doc.createdAt, local: true };
+    localPlots = [...localPlots, mine]; saveLocal(localPlots); mergePlots(); renderPlots();
+    return mine;
+  }
+
+  $('#lay').addEventListener('click', async () => {
+    if (!current || !current.agg || !info) return;
+    const lay = $('#lay'), { items, agg } = current;
+    lay.disabled = true; lay.textContent = 'Laying to rest…';
+    const slot = previewSlot();
+    const doc = { name: info.name.slice(0, 60), born: info.born, died: info.died, element: agg.dominant.num, residue: items[0].res.residue, files: items.length, createdAt: Date.now(), device: slot.device, start: slot.start, queue: slot.queue, by: uid || null };
+    try {
+      const ref = await keep(doc);
+      laid = { ...doc, id: ref.id };
+      if (!plots.some(p => p.id === ref.id)) plots = [...plots, laid];
+      skyState(); const mine = plots.find(p => p.id === ref.id) || laid; laid = mine;
+      lay.hidden = true; $('#see').hidden = false; $('#again').hidden = false; $('#back-3').hidden = true; $('#replay').hidden = true;
+      showPlacement(mine, false);
+      $('#statusline').textContent = `Laid to rest · Device ${pad3(mine.device)}`;
+      $('#bench-status').textContent = `${info.name} has been laid to rest. Device ${pad3(mine.device)} now holds them in ${agg.dominant.name.toLowerCase()}.${ref.local ? ' Their plot is kept on this device.' : ''}`;
+      renderSteppers('lay-3');
+    } catch (err) {
+      lay.disabled = false; lay.textContent = 'Try again';
+      $('#bench-status').textContent = err && err.code === 'quota_exceeded' ? 'The burial ground is full. An owner needs to clear old plots first.' : 'The plot could not be kept. Try again.';
+    }
+  });
+
+  /* ---------- router ---------- */
+  const VIEWS = ['home', 'mission', 'lay-1', 'lay-2', 'lay-3', 'plots'];
+  const ALIAS = { 'inter-1': 'lay-1', 'inter-2': 'lay-2', 'inter-3': 'lay-3', sky: 'plots', about: 'mission' };
+  function route() {
+    let v = (location.hash || '#home').slice(1); v = ALIAS[v] || v;
+    if (!VIEWS.includes(v)) v = 'home';
+    if (!allowed(v)) { v = info ? 'lay-2' : 'lay-1'; history.replaceState(null, '', '#' + v); }
+    $$('[data-view]').forEach(s => { s.hidden = s.dataset.view !== v; });
+    const sec = v.startsWith('lay') ? 'lay' : v;
+    $$('.bar nav a').forEach(a => a.toggleAttribute('aria-current', false)); const cur = $(`.bar nav a[data-sec="${sec}"]`); if (cur) cur.setAttribute('aria-current', 'page');
+    if (v.startsWith('lay')) renderSteppers(v);
+    if (v === 'plots') renderSky();
+    hideTip(); window.scrollTo(0, 0);
+    const h = $(`[data-view="${v}"] [tabindex="-1"]`); if (h && document.activeElement && document.activeElement !== document.body) h.focus({ preventScroll: true });
+    if (v === 'lay-1') setTimeout(() => $('#f-name').focus({ preventScroll: true }), 60);
+  }
+  addEventListener('hashchange', route);
+
+  function note(msg) { const n = $('#plots-note'); n.textContent = msg; n.hidden = false; }
+  async function connect() {
+    mergePlots(); renderPlots();
+    if (!window.claude || typeof window.claude.use !== 'function') return;
+    [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+    if (user) { try { uid = await user.id(); canEdit = !!(await user.canEdit()); } catch { /* anonymous */ } }
+    if (!db) return;
+    db.collection('plots').orderBy('createdAt', 'desc').limit(1000).onSnapshot(snap => {
+      shared = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(validPlot);
+      mergePlots(); renderPlots();
+    }, () => { db = null; });
+  }
+  setInterval(() => { if (!document.hidden) renderPlots(); }, 60000);
+
+  route();
+  connect();
+})();
+</script>
+
+</body>
+</html>
